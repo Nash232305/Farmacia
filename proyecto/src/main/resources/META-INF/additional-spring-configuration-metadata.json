@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "oracle.net.wallet_location",
+    "type": "java.lang.String",
+    "description": "A description for 'oracle.net.wallet_location'"
+  },
+  {
+    "name": "oracle.net.tns_admin",
+    "type": "java.lang.String",
+    "description": "A description for 'oracle.net.tns_admin'"
+  },
+  {
+    "name": "spring.datasource.wallet-location",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.wallet-location'"
+  }
+]}

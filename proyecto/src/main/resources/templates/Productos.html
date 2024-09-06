@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" th:href="@{/css/styleproducto.css}">
+    
+    <script>
+        function buscarProductos() {
+            const query = document.getElementById('searchQuery').value;
+
+            fetch('/Productos?query=' + query)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('product-container').innerHTML = html;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarProductos);
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li><a href="/Productos">Productos</a></li>
+            <li><a href="/Sucursales">Sucursales</a></li>
+            <li><a href="#">Pedidos</a></li>
+            <li><a href="#">Reportes</a></li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor para título y barra de búsqueda -->
+   
+    <div class="header-container">
+        <h1 class="main-title">Productos Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar producto...">
+    </div>
+    <p class="sub-title">Seleccione un producto para más detalles.</p>
+    
+
+    <div id="product-container" class="content">
+        <!-- Galería de Productos -->
+        <div class="product-gallery" th:fragment="product-gallery">
+            <div class="product-card" th:each="producto : ${productos}">
+                <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                <p th:text="${producto.descripcion}">Descripción del Producto</p>
+                <p>Fecha de Vencimiento: <span th:text="${#dates.format(producto.fechaVencimiento, 'dd/MM/yyyy')}">dd/MM/yyyy</span></p>
+                <p>Precio: <span th:text="${#numbers.formatDecimal(producto.costo, 1, 'POINT', 2, 'COMMA')}">0.00</span> CRC</p>
+                <p>Cantidad: <span th:text="${producto.cantidad}">0</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

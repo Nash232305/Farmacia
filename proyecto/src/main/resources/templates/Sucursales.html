@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales</title>
+    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}">
+    
+    <script>
+        function buscarSucursales() {
+            const query = document.getElementById('searchQuery').value;
+
+            fetch('/Sucursales?query=' + query)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sucursal-container').innerHTML = html;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarSucursales);
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li><a href="/Productos">Productos</a></li>
+            <li><a href="/Sucursales">Sucursales</a></li>
+            <li><a href="#">Pedidos</a></li>
+            <li><a href="#">Reportes</a></li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor para título y barra de búsqueda -->
+    <div class="header-container">
+        <h1 class="main-title">Sucursales Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar sucursal...">
+    </div>
+    <p class="sub-title">Seleccione una sucursal para más detalles.</p>
+
+    <div id="sucursal-container" class="content">
+        <!-- Galería de Sucursales -->
+        <div class="sucursal-gallery" th:fragment="sucursal-gallery">
+            <div class="sucursal-card" th:each="sucursal : ${sucursales}">
+                <img src="https://diariofarma.com/wp-content/uploads/2018/12/Farmacia-Ja%C3%A9n_27.08.15-e1544535985370.jpg" alt="Imagen de la Sucursal" class="sucursal-img">
+                <h3 th:text="${sucursal.nombre}">Nombre de la Sucursal</h3>
+                <p>Provincia: <span th:text="${sucursal.provincia}">Provincia</span></p>
+                <p>Teléfono: <span th:text="${sucursal.telefono}">Teléfono</span></p>
+                <p>Fecha de Apertura: <span th:text="${#dates.format(sucursal.fechaApertura, 'dd/MM/yyyy')}">Fecha</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
