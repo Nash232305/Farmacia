@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+=======
+--CREAR TABLA SUCURSAL
+
+CREATE TABLE SUCURSAL_FARMACIA (
+    ID NUMBER PRIMARY KEY,
+    NOMBRE VARCHAR2(50) NOT NULL,
+    PROVINCIA VARCHAR2(50) NOT NULL,
+    ESTADO CHAR(1) NOT NULL,
+    TELEFONO VARCHAR2(20) NOT NULL,
+    FECHAAPERTURA DATE
+);
+
+-- Crear ï¿½ndice ï¿½nico para el campo NOMBRE
+CREATE UNIQUE INDEX IDX_NOMBRE_UNIQUE ON SUCURSAL_FARMACIA (NOMBRE);
+
+-- Crear ï¿½ndice ï¿½nico para el campo TELEFONO
+CREATE UNIQUE INDEX IDX_TELEFONO_UNIQUE ON SUCURSAL_FARMACIA (TELEFONO);
+
+--Tabla empleado 
+>>>>>>> c41a8c7df9428839a2d8d93a8cb5d70cdadb275a
 CREATE TABLE EMPLEADO_FARMACIA 
 (
   ID NUMBER(*,0), 
@@ -40,7 +61,12 @@ CREATE TABLE FABRICANTE_FARMACIA (
     PAIS VARCHAR2(50) NOT NULL
 );
 
+<<<<<<< HEAD
 -- Crear Ã­ndice Ãºnico para el campo NOMBRE
+=======
+
+-- Crear ï¿½ndice ï¿½nico para el campo NOMBRE
+>>>>>>> c41a8c7df9428839a2d8d93a8cb5d70cdadb275a
 CREATE UNIQUE INDEX IDX_NOMBRE_UNIQUE ON FABRICANTE_FARMACIA (NOMBRE);
 
 
@@ -56,10 +82,17 @@ CREATE TABLE PRODUCTO_FARMACIA (
     CANTIDAD NUMBER NOT NULL
 );
 
+<<<<<<< HEAD
 -- Crear Ã­ndice Ãºnico para el campo NOMBRE
 CREATE UNIQUE INDEX IDX_NOMBRE_UNIQUE ON PRODUCTO_FARMACIA (NOMBRE);
 
 -- Crear restricciones de clave forÃ¡nea
+=======
+-- Crear ï¿½ndice ï¿½nico para el campo NOMBRE
+CREATE UNIQUE INDEX IDX_NOMBRE_UNIQUE ON PRODUCTO_FARMACIA (NOMBRE);
+
+-- Crear restricciones de clave forï¿½nea
+>>>>>>> c41a8c7df9428839a2d8d93a8cb5d70cdadb275a
 ALTER TABLE PRODUCTO_FARMACIA ADD CONSTRAINT IDFABRICANTE_FK1 FOREIGN KEY (IDFABRICANTE)
     REFERENCES FABRICANTE_FARMACIA (ID);
 
@@ -109,54 +142,57 @@ INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (9, 'AbbVie', 'Estados
 INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (10, 'Bristol-Myers Squibb', 'Estados Unidos');
 INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (11, 'Bayer', 'Alemania');
 INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (12, 'Novo Nordisk', 'Dinamarca');
-INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (13, 'Takeda', 'Japón');
+INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (13, 'Takeda', 'Japï¿½n');
 INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (14, 'Amgen', 'Estados Unidos');
 INSERT INTO Fabricante_Farmacia (ID, Nombre, Pais) VALUES (15, 'Teva', 'Israel');
 
 
 -- Inserts para Proveedor_Farmacia READY
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (1, 'CONDEFA', 'San José', '12345678');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (1, 'CONDEFA', 'San Josï¿½', '12345678');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (2, 'COFASA', 'Alajuela', '87654321');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (3, 'FARMACORP', 'Cartago', '23456789');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (4, 'Medicinas Nacional', 'Heredia', '34567890');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (5, 'Salud Pura Vida', 'Puntarenas', '45678901');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (6, 'BIOFARMA', 'Guanacaste', '56789012');
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (7, 'FarmaLuz', 'Limón', '67890123');
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (8, 'PHARMA PLUS', 'San José', '78901234');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (7, 'FarmaLuz', 'Limï¿½n', '67890123');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (8, 'PHARMA PLUS', 'San Josï¿½', '78901234');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (9, 'MEDICORP', 'Alajuela', '89012345');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (10, 'Farma a tu casa', 'Cartago', '90123456');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (11, 'SALUD Y VIDA', 'Heredia', '01234567');
 INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (12, 'Proveedor Farma S.A', 'Puntarenas', '12345098');
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (13, 'Cariño S.A', 'Guanacaste', '23450987');
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (14, 'FARMACIA POPULAR', 'Limón', '34509876');
-INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (15, 'PopuFarma S.A', 'San José', '45609875');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (13, 'Cariï¿½o S.A', 'Guanacaste', '23450987');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (14, 'FARMACIA POPULAR', 'Limï¿½n', '34509876');
+INSERT INTO Proveedor_Farmacia (ID, Nombre, Provincia, Telefono) VALUES (15, 'PopuFarma S.A', 'San Josï¿½', '45609875');
+
 -- Inserts para Producto_Farmacia READY
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (1, 'Paracetamol', 'Analgésico', TO_DATE('2025-12-31', 'YYYY-MM-DD'), 55.50, 1, 1, 0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (1, 'Paracetamol', 'AnalgÃ©sico', TO_DATE('2025-12-31', 'YYYY-MM-DD'), 55.50, 1, 1, 0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (2, 'Ibuprofeno', 'Antiinflamatorio', TO_DATE('2024-06-30', 'YYYY-MM-DD'), 77.25, 2, 2, 0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (3, 'Amoxicilina', 'Antibiótico', TO_DATE('2024-11-15', 'YYYY-MM-DD'), 120.00, 3,3, 0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (4, 'Loratadina', 'Antihistamínico', TO_DATE('2025-05-20', 'YYYY-MM-DD'), 45.75, 4, 4, 0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (3, 'Amoxicilina', 'AntibiÃ³tico', TO_DATE('2024-11-15', 'YYYY-MM-DD'), 120.00, 3,3, 0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (4, 'Loratadina', 'AntihistamÃ­nico', TO_DATE('2025-05-20', 'YYYY-MM-DD'), 45.75, 4, 4, 0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (5, 'Omeprazol', 'Inhibidor de la bomba de protones', TO_DATE('2024-10-10', 'YYYY-MM-DD'), 85.50, 5, 5, 0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (6, 'Metformina', 'Antidiabético', TO_DATE('2025-01-01', 'YYYY-MM-DD'), 65.00, 6, 6,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (6, 'Metformina', 'AntidiabÃ©tico', TO_DATE('2025-01-01', 'YYYY-MM-DD'), 65.00, 6, 6,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (7, 'Simvastatina', 'Hipolipemiante', TO_DATE('2024-09-30', 'YYYY-MM-DD'), 95.25, 7,7,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (8, 'Aspirina', 'Analgésico', TO_DATE('2025-03-15', 'YYYY-MM-DD'), 50.00, 8,8,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (8, 'Aspirina', 'AnalgÃ©sico', TO_DATE('2025-03-15', 'YYYY-MM-DD'), 50.00, 8,8,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (9, 'Clopidogrel', 'Antiplaquetario', TO_DATE('2024-12-01', 'YYYY-MM-DD'), 110.75, 9,9,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (10, 'Atorvastatina', 'Hipolipemiante', TO_DATE('2025-07-07', 'YYYY-MM-DD'), 130.50, 10,10,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (11, 'Losartán', 'Antihipertensivo', TO_DATE('2024-08-25', 'YYYY-MM-DD'), 75.00, 11,11,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (11, 'LosartÃ¡n', 'Antihipertensivo', TO_DATE('2024-08-25', 'YYYY-MM-DD'), 75.00, 11,11,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (12, 'Levotiroxina', 'Hormona tiroidea', TO_DATE('2025-02-28', 'YYYY-MM-DD'), 90.00, 12,12,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (13, 'Amlodipino', 'Antihipertensivo', TO_DATE('2024-11-11', 'YYYY-MM-DD'), 80.50, 13,13,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (14, 'Metoprolol', 'Betabloqueante', TO_DATE('2025-06-06', 'YYYY-MM-DD'), 105.00, 14,14,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (15, 'Enalapril', 'Antihipertensivo', TO_DATE('2024-10-20', 'YYYY-MM-DD'), 70.25, 15,15,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (16, 'Furosemida', 'Diurético', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 60.00, 1,1,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (16, 'Furosemida', 'DiurÃ©tico', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 60.00, 1,1,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (17, 'Prednisona', 'Corticosteroide', TO_DATE('2024-12-12', 'YYYY-MM-DD'), 115.50, 2,2,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (18, 'Ciprofloxacino', 'Antibiótico', TO_DATE('2025-01-15', 'YYYY-MM-DD'), 125.00, 3,3,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (18, 'Ciprofloxacino', 'AntibiÃ³tico', TO_DATE('2025-01-15', 'YYYY-MM-DD'), 125.00, 3,3,0);
 INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (19, 'Dexametasona', 'Corticosteroide', TO_DATE('2024-09-09', 'YYYY-MM-DD'), 100.00, 4,4,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (20, 'Tramadol', 'Analgésico', TO_DATE('2025-05-05', 'YYYY-MM-DD'), 140.75, 5,5,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (21, 'Cetirizina', 'Antihistamínico', TO_DATE('2024-08-08', 'YYYY-MM-DD'), 55.00, 6,6,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (22, 'Ranitidina', 'Antihistamínico', TO_DATE('2025-03-03', 'YYYY-MM-DD'), 75.50, 7,7,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (23, 'Fluconazol', 'Antifúngico', TO_DATE('2024-11-11', 'YYYY-MM-DD'), 85.00, 8,8,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (24, 'Azitromicina', 'Antibiótico', TO_DATE('2025-02-02', 'YYYY-MM-DD'), 95.75, 9,9,0);
-INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (25, 'Clorfenamina', 'Antihistamínico', TO_DATE('2024-10-10', 'YYYY-MM-DD'), 65.50, 10,10,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (20, 'Tramadol', 'AnalgÃ©sico', TO_DATE('2025-05-05', 'YYYY-MM-DD'), 140.75, 5,5,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (21, 'Cetirizina', 'AntihistamÃ­nico', TO_DATE('2024-08-08', 'YYYY-MM-DD'), 55.00, 6,6,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (22, 'Ranitidina', 'AntihistamÃ­nico', TO_DATE('2025-03-03', 'YYYY-MM-DD'), 75.50, 7,7,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (23, 'Fluconazol', 'AntifÃºngico', TO_DATE('2024-11-11', 'YYYY-MM-DD'), 85.00, 8,8,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (24, 'Azitromicina', 'AntibiÃ³tico', TO_DATE('2025-02-02', 'YYYY-MM-DD'), 95.75, 9,9,0);
+INSERT INTO Producto_Farmacia (ID, Nombre, Descripcion, FechaVencimiento, Costo, IDFabricante, IDProveedor, Cantidad) VALUES (25, 'Clorfenamina', 'AntihistamÃ­nico', TO_DATE('2024-10-10', 'YYYY-MM-DD'), 65.50, 10,10,0);
+
 -- Inserts para Sucursal_Farmacia READY
+<<<<<<< HEAD
 INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (1, 'Sucursal Belén', 'Heredia', 'A', '11223344', TO_DATE('2020-01-15', 'YYYY-MM-DD'));
 INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (2, 'Sucursal Lindora', 'San Jose', 'A', '22334455', TO_DATE('2021-02-20', 'YYYY-MM-DD'));
 INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (3, 'Sucursal Merced', 'San Jose', 'A', '33445566', TO_DATE('2021-01-22', 'YYYY-MM-DD'));
@@ -204,3 +240,25 @@ BEGIN
        OR UPPER(PROVINCIA) LIKE '%' || UPPER(p_busqueda) || '%';
 END buscar_sucursales_farmacia;
 /
+=======
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (1, 'Sucursal BelÃ©n', 'Heredia', 1, '11223344', TO_DATE('2020-01-15', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (2, 'Sucursal Lindora', 'San Jose', 1, '22334455', TO_DATE('2021-02-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (3, 'Sucursal Merced', 'San Jose', 1, '33445566', TO_DATE('2021-01-22', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (4, 'Sucursal Santa Ana', 'San Jose', 1, '44556677', TO_DATE('2020-09-02', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (5, 'Sucursal Heredia', 'Heredia', 1, '55667788', TO_DATE('2019-05-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (6, 'Sucursal Tarcoles', 'Puntarenas', 1, '66778899', TO_DATE('2008-05-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (7, 'Sucursal Esparza', 'Puntarenas', 1, '77889900', TO_DATE('2007-04-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (8, 'Sucursal Sarapiqui', 'Heredia', 1, '88990011', TO_DATE('2004-03-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (9, 'Sucursal Cartago', 'Cartago', 1, '99001122', TO_DATE('2009-05-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (10, 'Sucursal Santo Domingo', 'Heredia', 1, '00112233', TO_DATE('2002-08-22', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (11, 'Sucursal San Rafael', 'Heredia', 1, '11223355', TO_DATE('2022-03-19', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (12, 'Sucursal San Marcos', 'Heredia', 1, '22334466', TO_DATE('2023-05-18', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (13, 'Sucursal San Luis', 'Heredia', 1, '33445577', TO_DATE('2022-06-14', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (14, 'Sucursal Jaco', 'Puntarenas', 1, '44556688', TO_DATE('2020-07-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (15, 'Sucursal Puerto Limon', 'Limon', 1, '55667799', TO_DATE('2011-08-13', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (16, 'Sucursal Puerto Puntarenas', 'Puntarenas', 1, '66778800', TO_DATE('2012-01-11', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (17, 'Sucursal Atenas', 'Alajuela', 1, '77889911', TO_DATE('2013-02-12', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (18, 'Sucursal Alajuela', 'Alajuela', 1, '88990022', TO_DATE('2014-06-13', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (19, 'Sucursal La Garita', 'Alajuela', 1, '99001133', TO_DATE('2020-04-20', 'YYYY-MM-DD'));
+INSERT INTO Sucursal_Farmacia (ID, Nombre, Provincia, Estado, Telefono, FechaApertura) VALUES (20, 'Sucursal Norte', 'Limon', 1, '00112244', TO_DATE('2022-09-20', 'YYYY-MM-DD'));
+>>>>>>> c41a8c7df9428839a2d8d93a8cb5d70cdadb275a
