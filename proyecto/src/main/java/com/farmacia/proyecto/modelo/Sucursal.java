@@ -9,9 +9,27 @@ public class Sucursal {
     private char estado;
     private String telefono;
     private Date fechaApertura;
+    private int IDPROVEEDOR;
+    private int IDFABRICANTE;
 
     // Getters y Setters
 
+    public int getIDPROVEEDOR() {
+        return IDPROVEEDOR;
+    }
+
+    public void setIDPROVEEDOR(int IDPROVEEDOR) {
+        this.IDPROVEEDOR = IDPROVEEDOR;
+    }
+
+    public int getIDFABRICANTE() {
+        return IDFABRICANTE;
+    }
+
+    public void setIDFABRICANTE(int IDFABRICANTE) {
+        this.IDFABRICANTE = IDFABRICANTE;
+    }
+    
     public Long getId() {
         return id;
     }

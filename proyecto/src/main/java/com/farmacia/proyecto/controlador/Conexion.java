@@ -1,17 +1,14 @@
 package com.farmacia.proyecto.controlador;
 
-import java.sql.CallableStatement;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import com.farmacia.proyecto.utilitaria.Archivos;
 import org.springframework.stereotype.Service;
 
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -20,8 +17,6 @@ import oracle.jdbc.OracleTypes;
 @Service // o @Repository si es más adecuado
 public class Conexion {
     private Connection con;
-    private PreparedStatement preparedStatement;
-    private ResultSet resultSet;
     private String url;
     private String user;
     private String pass;
@@ -42,7 +37,6 @@ public class Conexion {
             System.out.println(e);
             System.out.println("Error al conectar la base de datos");
         }
-        this.con = con;
         return con;
     }
     
