@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version> <!-- Cambiar a una versión estable -->
+        <version>3.3.1</version> <!-- Cambiado a la versión más reciente -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -54,6 +54,8 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ojdbc11.jar</systemPath>
         </dependency>
+     
+
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>oraclepki</artifactId>
@@ -61,6 +63,19 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/oraclepki-23.5.0.24.07.jar</systemPath>
         </dependency>
+       
+        <!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc11 -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>23.5.0.24.07</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ojdbc11-23.5.0.24.07.jar</systemPath>
+      
+            
+        </dependency>
+
+
     </dependencies>
 
     <!-- Configuración del Build -->

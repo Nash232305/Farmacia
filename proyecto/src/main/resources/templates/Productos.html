@@ -5,17 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos</title>
     <link rel="stylesheet" th:href="@{/css/styleproducto.css}">
-    
-    <script>
-        function buscarProductos() {
-            const query = document.getElementById('searchQuery').value;
 
-            fetch('/Productos?query=' + query)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('product-container').innerHTML = html;
-                });
+    <script>
+        let debounceTimeout;
+        function buscarProductos() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                const query = document.getElementById('searchQuery').value;
+
+                fetch('/Productos?query=' + encodeURIComponent(query))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error en la solicitud: ' + response.status);
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        document.getElementById('product-container').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error al buscar productos:', error);
+                        alert('Error al buscar productos.');
+                    });
+            }, 300); // Espera 300ms después de que el usuario deje de escribir
         }
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('searchQuery');
@@ -23,24 +37,51 @@
         });
     </script>
 </head>
+
 <body>
+    <!-- Barra de navegación -->
     <nav class="navbar">
         <ul>
             <li><a href="/menu">Inicio</a></li>
-            <li><a href="/Productos">Productos</a></li>
-            <li><a href="/Sucursales">Sucursales</a></li>
-            <li><a href="#">Empleados</a></li>
-            <li><a href="#">Reportes productos</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
             <li><a href="/Login">Cerrar Sesión</a></li>
         </ul>
     </nav>
 
-    <!-- Contenedor para título y barra de búsqueda -->
+    <!-- Contenido de la página -->
     <div class="header-container">
-        <h1>Productos Disponibles</h1>
-        <div class="search-bar">
-            <input type="text" id="searchQuery" class="search-input" placeholder="Buscar producto...">
-        </div>
+        <h1 class="main-title">Productos Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar producto...">
     </div>
     <p class="sub-title">Seleccione un producto para más detalles.</p>
 

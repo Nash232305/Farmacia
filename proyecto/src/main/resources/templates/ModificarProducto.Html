@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Producto</title>
+    <link rel="stylesheet" th:href="@{/css/styleModificarProducto.css}">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a th:href="@{/menu}">Inicio</a></li>
+            <li class="submenu">
+                <a th:href="@{/Productos}">Productos</a>
+                <ul>
+                    <li><a th:href="@{/AgregarProducto}">Agregar Producto</a></li>
+                    <li><a th:href="@{/ModificarProducto}">Modificar Producto</a></li>
+                    <li><a th:href="@{/EliminarProducto}">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a th:href="@{/Sucursales}">Sucursales</a>
+                <ul>
+                    <li><a th:href="@{/AgregarSucursal}">Agregar Sucursal</a></li>
+                    <li><a th:href="@{/ModificarSucursal}">Modificar Sucursal</a></li>
+                    <li><a th:href="@{/EliminarSucursal}">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Empleados</a>
+                <ul>
+                    <li><a th:href="@{/AgregarEmpleado}">Agregar Empleado</a></li>
+                    <li><a th:href="@{/ModificarEmpleado}">Modificar Empleado</a></li>
+                    <li><a th:href="@{/EliminarEmpleado}">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a th:href="@{/ReporteVentas}">Reporte de Ventas</a></li>
+                    <li><a th:href="@{/ReporteInventario}">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/Login}">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <div class="container">
+        <!-- Formulario de Búsqueda -->
+    
+        <div id="buscarProducto" class="form-container">
+            <h2>Buscar Producto</h2>
+            <form th:action="@{/buscarProducto}" method="post">
+                <input type="text" name="nombreProducto" placeholder="Nombre del producto" class="input-text">
+                <button type="submit" class="button">Buscar</button>
+            </form>
+        </div>
+
+        <!-- Mensajes de error -->
+        <div th:if="${mensajeError}" class="error-message">
+            <p th:text="${mensajeError}"></p>
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div th:if="${mensajeExito}" class="success-message">
+            <p th:text="${mensajeExito}"></p>
+        </div>
+
+
+        <!-- Contenedor flexible para las tablas y el formulario -->
+        <div th:if="${productoEncontrado != null and productoEncontrado}" class="flex-container">
+            <!-- Contenedor para las tablas alineadas a la izquierda -->
+            <div class="tables-container">
+                <!-- Sección de IDs y Nombres de Proveedores -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de proveedores existentes:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID del Proveedor</th>
+                                    <th>Nombre del Proveedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="proveedor : ${proveedores}">
+                                    <td th:text="${proveedor['id']}"></td>
+                                    <td th:text="${proveedor['nombre']}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sección de IDs y Nombres de Fabricantes -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de fabricantes existentes:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID del Fabricante</th>
+                                    <th>Nombre del Fabricante</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="fabricante : ${fabricantes}">
+                                    <td th:text="${fabricante['id']}"></td>
+                                    <td th:text="${fabricante['nombre']}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formularios de Modificación alineados a la derecha -->
+            <div class="form-container">
+                <h2>Modificar Producto</h2>
+                <div th:each="producto : ${productos}">
+                    <form th:action="@{/modificarProducto}" method="post">
+                        <div class="form-group">
+                            <label>ID:</label>
+                            <span th:text="${producto.id}" class="data-field"></span>
+                            <input type="hidden" name="id" th:value="${producto.id}" />
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" name="nombre" th:value="${producto.nombre}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción:</label>
+                            <input type="text" name="descripcion" th:value="${producto.descripcion}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Vencimiento:</label>
+                            <input type="date" name="fechaVencimiento" th:value="${#dates.format(producto.fechaVencimiento, 'yyyy-MM-dd')}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>Costo:</label>
+                            <input type="text" name="costo" th:value="${producto.costo}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="text" name="cantidad" th:value="${producto.cantidad}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>ID Fabricante:</label>
+                            <input type="text" name="idFabricante" th:value="${producto.idFabricante}" class="input-text">
+                        </div>
+                        <div class="form-group">
+                            <label>ID Proveedor:</label>
+                            <input type="text" name="idProveedor" th:value="${producto.idProveedor}" class="input-text">
+                        </div>
+                        <!-- Botón para modificar -->
+                        <button type="submit" class="button" onclick="return confirm('¿Está seguro de que desea modificar este producto?')">Modificar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

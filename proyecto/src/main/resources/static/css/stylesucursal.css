@@ -1,0 +1,202 @@
+
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor de la barra de búsqueda y título */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra los elementos horizontalmente */
+    padding: 20px;
+    gap: 20px; /* Espacio entre el título y la barra de búsqueda */
+    margin: 0 auto; /* Centra el contenedor en el medio de la página */
+    position: relative; /* Necesario para que funcione el positioning */
+}
+
+/* Título principal */
+.main-title {
+    flex: 1; /* Hace que el título ocupe el máximo espacio posible */
+    text-align: center; /* Centra el texto del título */
+    margin: 0; /* Elimina el margen por defecto del título */
+}
+
+/* Estilo de la barra de búsqueda */
+.search-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: absolute; /* Hace que la barra de búsqueda se posicione relativa al contenedor */
+    right: 20px; /* Alinea la barra de búsqueda a la derecha del contenedor */
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Subtítulo */
+.sub-title {
+    text-align: center;
+    margin: 0 0 20px;
+    color: #666;
+}
+/* Estilo de la galería de sucursales */
+.sucursal-gallery {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las tarjetas se ajusten a la pantalla */
+    gap: 20px; /* Espacio entre las tarjetas */
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    padding: 20px; /* Espacio alrededor de la galería */
+}
+
+/* Estilo de cada tarjeta de sucursal */
+.sucursal-card {
+    background-color: white; /* Fondo blanco para las tarjetas */
+    border: 1px solid #ddd; /* Borde fino alrededor de la tarjeta */
+    border-radius: 8px; /* Bordes redondeados */
+    width: 300px; /* Ancho de la tarjeta */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    padding: 15px; /* Espacio interno de la tarjeta */
+    text-align: center; /* Centra el texto */
+    transition: transform 0.2s; /* Suaviza la transición al hacer hover */
+}
+
+/* Efecto al pasar el ratón sobre la tarjeta */
+.sucursal-card:hover {
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño al hacer hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+/* Estilo de la imagen de la sucursal */
+.sucursal-img {
+    width: 100%; /* Hace que la imagen ocupe todo el ancho de la tarjeta */
+    height: auto; /* Mantiene la proporción de la imagen */
+    border-radius: 5px; /* Bordes redondeados para la imagen */
+    margin-bottom: 10px; /* Espacio debajo de la imagen */
+}
+
+/* Título de la sucursal */
+.sucursal-card h3 {
+    font-size: 18px;
+    margin: 10px 0; /* Espacio alrededor del título */
+    color: #333; /* Color del texto */
+}
+
+/* Información de la sucursal */
+.sucursal-card p {
+    font-size: 14px;
+    color: #666; /* Color gris para el texto */
+    margin: 5px 0; /* Espacio alrededor del texto */
+}
+
+
+
+/* Barra de navegación */
+.navbar {
+    background-color: #007bff;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    position: relative; /* Permite que los submenús se posicionen correctamente */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del submenú */
+.submenu ul {
+    display: none; /* Ocultar el submenú por defecto */
+    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
+    background-color: #007bff;
+    top: 100%; /* Aparece justo debajo del padre */
+    left: 0;
+    min-width: 150px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
+}
+
+.submenu:hover ul {
+    display: block; /* Mostrar el submenú al pasar el ratón */
+}
+
+.submenu ul li {
+    width: 100%;
+    text-align: left;
+}
+
+.submenu ul li a {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .submenu ul {
+        position: static;
+        display: none;
+        background-color: #007bff;
+    }
+
+    .submenu:hover ul {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar ul li a {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .submenu ul {
+        min-width: 100%;
+    }
+}

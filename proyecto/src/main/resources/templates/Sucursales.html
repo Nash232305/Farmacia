@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sucursales</title>
-    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}"> <!-- Archivo CSS -->
+    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}">
+
 
     <script>
         function buscarSucursales() {
@@ -23,116 +25,7 @@
     </script>
 </head>
 
-<style> 
-/* Estilo general */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-}
 
-/* Barra de navegación */
-.navbar {
-    background-color: #007bff;
-    padding: 15px;
-    text-align: center;
-}
-
-.navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.navbar ul li {
-    margin: 0 15px;
-    position: relative; /* Permite que los submenús se posicionen correctamente */
-}
-
-.navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 8px 16px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.navbar ul li a:hover {
-    background-color: #0056b3;
-}
-
-/* Estilo del submenú */
-.submenu ul {
-    display: none; /* Ocultar el submenú por defecto */
-    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
-    background-color: #007bff;
-    top: 100%; /* Aparece justo debajo del padre */
-    left: 0;
-    min-width: 150px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
-}
-
-.submenu:hover ul {
-    display: block; /* Mostrar el submenú al pasar el ratón */
-}
-
-.submenu ul li {
-    width: 100%;
-    text-align: left;
-}
-
-.submenu ul li a {
-    padding: 10px;
-    color: #fff;
-    text-decoration: none;
-    display: block;
-}
-
-.submenu ul li a:hover {
-    background-color: #0056b3;
-}
-
-/* Ajustes para dispositivos pequeños */
-@media (max-width: 768px) {
-    .navbar ul {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .navbar ul li {
-        margin: 10px 0;
-    }
-
-    .submenu ul {
-        position: static;
-        display: none;
-        background-color: #007bff;
-    }
-
-    .submenu:hover ul {
-        display: block;
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar ul li a {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-
-    .submenu ul {
-        min-width: 100%;
-    }
-}
-</style> 
 
 <body>
     <!-- Barra de navegación -->

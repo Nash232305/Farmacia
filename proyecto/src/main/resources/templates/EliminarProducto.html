@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Producto</title>
+    <link rel="stylesheet" th:href="@{/css/styleEliminarProducto.css}">
+
+    <script>
+        // Función para buscar productos basados en el nombre
+        let debounceTimeout;
+        function buscarProductos() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                const query = document.getElementById('searchQuery').value;
+                fetch('/EliminarProducto?query=' + encodeURIComponent(query))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error en la solicitud: ' + response.status);
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        document.getElementById('product-container').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error al buscar productos:', error);
+                        alert('Error al buscar productos.');
+                    });
+            }, 300); // Espera 300ms después de que el usuario deje de escribir
+        }
+
+
+        // Función para eliminar producto por ID
+        function eliminarProducto(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                fetch('/EliminarProducto/' + id, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Producto eliminado correctamente.');
+                            buscarProductos(); // Actualiza la lista de productos después de eliminar
+                            window.location.reload();
+                        } else {
+                            return response.text().then(text => { throw new Error(text); });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al eliminar el producto:', error);
+                        alert('Error al eliminar el producto: ' + error.message);
+                    });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarProductos);
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Eliminar Producto</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar producto...">
+    </div>
+    <p class="sub-title">Seleccione un producto para eliminarlo.</p>
+
+    <div id="product-container" class="content">
+        <!-- Galería de Productos -->
+        <div class="product-gallery" th:fragment="product-gallery">
+            <div class="product-card" th:each="producto : ${productos}">
+                <h3 th:text="'ID: ' + ${producto.id}">ID del Producto</h3>
+                <h4 th:text="${producto.nombre}">Nombre del Producto</h4>
+                <p th:text="${producto.descripcion}">Descripción del Producto</p>
+                <p>ID Fabricante: <span th:text="${producto.idFabricante}">0</span></p>
+                <p>ID Proveedor: <span th:text="${producto.idProveedor}">0</span></p>
+                <p>Fecha de Vencimiento: <span th:text="${#dates.format(producto.fechaVencimiento, 'dd/MM/yyyy')}">dd/MM/yyyy</span></p>
+                <p>Precio: <span th:text="${#numbers.formatDecimal(producto.costo, 1, 'POINT', 2, 'COMMA')}">0.00</span> CRC</p>
+                <p>Cantidad: <span th:text="${producto.cantidad}">0</span></p>
+                <button class="btn-eliminar" th:onclick="'javascript:eliminarProducto(' + ${producto.id} + ');'">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

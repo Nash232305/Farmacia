@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" th:href="@{/css/styleAgregarProducto.css}">
+    <script>
+        // Función de validación del formulario
+        function validarFormulario() {
+            const id = document.getElementById('id').value;
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const fechaVencimiento = document.getElementById('fechaVencimiento').value;
+            const costo = document.getElementById('costo').value;
+            const idFabricante = document.getElementById('idFabricante').value;
+            const idProveedor = document.getElementById('idProveedor').value;
+            const cantidad = document.getElementById('cantidad').value;
+
+            if (!id || !nombre || !descripcion || !fechaVencimiento || !costo || !idFabricante || !idProveedor || !cantidad) {
+                alert("Todos los campos son obligatorios.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Agregar Producto</h1>
+
+        <!-- Sección de mensajes de error -->
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <!-- Contenedor flexible para las tablas y el formulario -->
+        <div class="flex-container">
+            <!-- Contenedor para las tablas alineadas en columna -->
+            <div class="tables-container">
+                <!-- Sección de IDs y Nombres de Productos -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de productos existentes:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID del Producto</th>
+                                    <th>Nombre del Producto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Itera sobre los IDs y nombres de productos y los muestra en la tabla -->
+                                <tr th:each="producto : ${productos}">
+                                    <td th:text="${producto.id}"></td>
+                                    <td th:text="${producto.nombre}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sección de IDs y Nombres de Proveedores -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de proveedores existentes:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID del Proveedor</th>
+                                    <th>Nombre del Proveedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Itera sobre los IDs y nombres de proveedores -->
+                                <tr th:each="proveedor : ${proveedores}">
+                                    <td th:text="${proveedor.id}"></td>
+                                    <td th:text="${proveedor.nombre}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sección de IDs y Nombres de Fabricantes -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de fabricantes existentes:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID del Fabricante</th>
+                                    <th>Nombre del Fabricante</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Itera sobre los IDs y nombres de fabricantes -->
+                                <tr th:each="fabricante : ${fabricantes}">
+                                    <td th:text="${fabricante.id}"></td>
+                                    <td th:text="${fabricante.nombre}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <!-- Formulario para agregar producto -->
+            <div class="form-container">
+                <form action="#" th:action="@{/AgregarProducto}" th:object="${producto}" method="post" onsubmit="return validarFormulario()">
+                    <!-- Campo de entrada para el ID -->
+                    <label for="id">ID:</label>
+                    <input type="number" id="id" th:field="*{id}" required>
+
+                    <!-- Campo de entrada para el Nombre -->
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}" required>
+                    
+                    <!-- Campo de entrada para la Descripción -->
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" th:field="*{descripcion}" required></textarea>
+                    
+                    <!-- Campo de entrada para la Fecha de Vencimiento -->
+                    <label for="fechaVencimiento">Fecha de Vencimiento:</label>
+                    <input type="date" id="fechaVencimiento" th:field="*{fechaVencimiento}" required>
+                    
+                    <!-- Campo de entrada para el Costo -->
+                    <label for="costo">Costo:</label>
+                    <input type="number" step="0.01" id="costo" th:field="*{costo}" required>
+                    
+                    <!-- Campo de entrada para el ID del Fabricante -->
+                    <label for="idFabricante">ID Fabricante:</label>
+                    <input type="number" id="idFabricante" th:field="*{idFabricante}" required>
+                    
+                    <!-- Campo de entrada para el ID del Proveedor -->
+                    <label for="idProveedor">ID Proveedor:</label>
+                    <input type="number" id="idProveedor" th:field="*{idProveedor}" required>
+                    
+                    <!-- Campo de entrada para la Cantidad -->
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" id="cantidad" th:field="*{cantidad}" required>
+                    
+                    <!-- Botón para enviar el formulario -->
+                    <button type="submit">Agregar Producto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
