@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empleados</title>
+    <link rel="stylesheet" th:href="@{/css/styleempleado.css}"> <!-- Archivo CSS -->
+
+    <script>
+        function buscarEmpleados() {
+            const query = document.getElementById('searchQuery').value;
+
+            fetch('/Empleados?query=' + query)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('empleado-container').innerHTML = html;
+                    convertirEstado(); // Convertir estado después de cargar el HTML
+                });
+        }
+
+        function convertirEstado() {
+            const estados = document.querySelectorAll('.estado');
+            estados.forEach(estado => {
+                if (estado.textContent.trim() === '1') {
+                    estado.textContent = 'Activo';
+                } else if (estado.textContent.trim() === '0') {
+                    estado.textContent = 'Inactivo';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarEmpleados);
+        });
+    </script>
+</head>
+
+<style> 
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #007bff;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    position: relative; /* Permite que los submenús se posicionen correctamente */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del submenú */
+.submenu ul {
+    display: none; /* Ocultar el submenú por defecto */
+    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
+    background-color: #007bff;
+    top: 100%; /* Aparece justo debajo del padre */
+    left: 0;
+    min-width: 150px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
+}
+
+.submenu:hover ul {
+    display: block; /* Mostrar el submenú al pasar el ratón */
+}
+
+.submenu ul li {
+    width: 100%;
+    text-align: left;
+}
+
+.submenu ul li a {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .submenu ul {
+        position: static;
+        display: none;
+        background-color: #007bff;
+    }
+
+    .submenu:hover ul {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar ul li a {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .submenu ul {
+        min-width: 100%;
+    }
+}
+
+/* Estilo de la galería de empleados */
+.empleado-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.empleado-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.empleado-card:hover {
+    transform: scale(1.05);
+}
+
+.empleado-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-comprar {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-comprar:hover {
+    background-color: #0056b3;
+}
+
+</style> 
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Empleados Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar empleado...">
+    </div>
+
+    <div id="empleado-container" class="content">
+        <!-- Galería de Empleados -->
+        <div class="empleado-gallery" th:fragment="empleado-gallery">
+            <div class="empleado-card" th:each="empleado : ${empleados}">
+                <h3 th:text="${empleado.nombre}">Nombre del Empleado</h3>
+                <p>Apellido: <span th:text="${empleado.apellido}">Apellido</span></p>
+                <p>Cédula: <span th:text="${empleado.cedula}">Cédula</span></p>
+                <p>Sexo: <span th:text = "${empleado.sexo}">Sexo</span></p>
+                <p>Teléfono: <span th:text="${empleado.numeroTelefono}">Teléfono</span></p>
+                <p>Salario: <span th:text="${empleado.salario}">Salario</span></p>
+                <p>Estado: <span class="estado" th:text="${empleado.estado}">Estado</span></p>
+                <p>ID Sucursal: <span th:text="${empleado.idSucursal}">Identificación de sucursal</span></p>
+                <p>Edad: <span th:text="${empleado.edad}">Edad</span></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Empleados</title>
+    <link rel="stylesheet" th:href="@{/css/styleempleado.css}">
+
+    <script>
+        let selectedEmpleadoCedula = null; // Variable global para guardar la cédula
+
+        function buscarEmpleados() {
+            const query = document.getElementById('searchQuery').value;
+
+            fetch('/Empleados?query=' + query)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('empleado-container').innerHTML = html;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarEmpleados);
+        });
+
+        function selectEmpleado(element) {
+            const prevSelected = document.querySelector('.empleado-card.selected');
+            if (prevSelected) {
+                prevSelected.classList.remove('selected');
+            }
+
+            selectedEmpleadoCedula = element.getAttribute('data-cedula');
+
+            // Actualizar la información en el modal
+            document.getElementById('modal-cedula').innerText = element.getAttribute('data-cedula');
+            document.getElementById('modal-nombre').innerText = element.getAttribute('data-nombre');
+            document.getElementById('modal-apellido').innerText = element.getAttribute('data-apellido');
+            document.getElementById('modal-email').innerText = element.getAttribute('data-email');
+            document.getElementById('modal-edad').innerText = element.getAttribute('data-edad');
+            document.getElementById('modal-telefono').innerText = element.getAttribute('data-telefono');
+            document.getElementById('modal-salario').innerText = element.getAttribute('data-salario');
+            document.getElementById('modal-estado').innerText = element.getAttribute('data-estado');
+            document.getElementById('modal-idSucursal').innerText = element.getAttribute('data-idSucursal');
+
+            document.getElementById('empleado-modal').style.display = 'block';
+            element.classList.add('selected');
+        }
+
+        function closeModal() {
+            document.getElementById('empleado-modal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            document.getElementById('empleado-modal').style.display = 'none';
+            document.getElementById('confirm-delete').style.display = 'block';
+        }
+
+        function closeConfirmDelete() {
+            document.getElementById('confirm-delete').style.display = 'none';
+        }
+
+        function deleteEmpleado() {
+            if (!selectedEmpleadoCedula) {
+                alert('No se ha seleccionado ningún empleado.');
+                return;
+            }
+
+            fetch(`/EliminarEmpleado/${selectedEmpleadoCedula}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Empleado eliminado');
+                    buscarEmpleados(); 
+                } else {
+                    alert('Error al eliminar el empleado');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar el empleado');
+            });
+
+            closeConfirmDelete();
+        }
+    </script>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background-color: #007bff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+            position: relative;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo del submenú */
+        .submenu ul {
+            display: none;
+            position: absolute;
+            background-color: #007bff;
+            top: 100%;
+            left: 0;
+            min-width: 150px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .submenu:hover ul {
+            display: block;
+        }
+
+        .submenu ul li {
+            width: 100%;
+            text-align: left;
+        }
+
+        .submenu ul li a {
+            padding: 10px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+        }
+
+        .submenu ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+
+            .submenu ul {
+                position: static;
+                display: none;
+                background-color: #007bff;
+            }
+
+            .submenu:hover ul {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar ul li a {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+            .submenu ul {
+                min-width: 100%;
+            }
+        }
+
+        /* Estilo de la galería de empleados */
+        .empleado-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .empleado-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .empleado-card:hover {
+            transform: scale(1.05);
+        }
+
+        .empleado-card.selected {
+            border: 2px solid #4CAF50;
+            background-color: #f0f8ff;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .main-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Empleados Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar empleado...">
+    </div>
+    <p class="sub-title">Seleccione el empleado que desea eliminar.</p>
+
+    <div id="empleado-container" class="content">
+        <!-- Galería de Empleados -->
+        <div class="empleado-gallery" th:fragment="empleado-gallery">
+            <div class="empleado-card"
+                th:each="empleado : ${empleados}"
+                onclick="selectEmpleado(this)"
+                th:data-cedula="${empleado.cedula}"
+                th:data-nombre="${empleado.nombre}"
+                th:data-apellido="${empleado.apellido}"
+                th:data-email="${empleado.email}"
+                th:data-telefono="${empleado.numeroTelefono}"
+                th:data-salario="${empleado.salario}"
+                th:data-estado="${empleado.estado}"
+                th:data-idsucursal="${empleado.idSucursal}">
+
+                <h3 th:text="${empleado.nombre}">Nombre del Empleado</h3>
+                <p>Apellido: <span th:text="${empleado.apellido}">Apellido</span></p>
+                <p>Cédula: <span th:text="${empleado.cedula}">Cédula</span></p>
+                <p>Teléfono: <span th:text="${empleado.numeroTelefono}">Teléfono</span></p>
+                <p>Salario: <span th:text="${empleado.salario}">Salario</span></p>
+                <p>Estado: <span class="estado" th:text="${empleado.estado}">Estado</span></p>
+                <p>ID Sucursal: <span th:text="${empleado.idSucursal}">Identificación de sucursal</span></p>
+                <p>Edad: <span th:text="${empleado.edad}">Edad</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini ventana (Modal) -->
+    <dialog id="empleado-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Información del Empleado Seleccionado</h2>
+            <p>Cédula: <span id="modal-cedula"></span></p>
+            <p>Nombre: <span id="modal-nombre"></span></p>
+            <p>Apellido: <span id="modal-apellido"></span></p>
+            <p>Email: <span id="modal-email"></span></p>
+            <p>Edad: <span id="modal-edad"></span></p>
+            <p>Teléfono: <span id="modal-telefono"></span></p>
+            <p>Salario: <span id="modal-salario"></span></p>
+            <p>Estado: <span id="modal-estado"></span></p>
+            <p>ID Sucursal: <span id="modal-idSucursal"></span></p>
+            <button onclick="confirmDelete()">Eliminar</button>
+        </div>
+    </dialog>
+
+    <!-- Confirmación de eliminación -->
+    <div id="confirm-delete" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmDelete()">&times;</span>
+            <h2>Confirmación</h2>
+            <p>¿Estás seguro de que deseas eliminar este empleado?</p>
+            <button onclick="deleteEmpleado()">Sí, eliminar</button>
+            <button onclick="closeConfirmDelete()">Cancelar</button>
+        </div>
+    </div>
+
+</body>
+</html>

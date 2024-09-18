@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales</title>
+    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}"> <!-- Archivo CSS -->
+
+    <script>
+        
+        function crearSucursal(event) {
+            event.preventDefault(); // Evita el envío del formulario y la recarga de la página
+
+            // Obtén los nuevos valores de los campos del formulario
+            const nombre = document.getElementById('nombre').value;
+            const provincia = document.getElementById('provincia').value;
+            const telefono = document.getElementById('telefono').value;
+
+            // Crea un objeto con los datos de la nueva sucursal
+            const data = {
+                nombre: nombre,
+                provincia: provincia,
+                telefono: telefono
+            };
+
+            // Realiza la petición POST para agregar la sucursal
+            fetch('/AgregarSucursal', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json'  // Añadir la cabecera para indicar el tipo de contenido
+                },
+                body: JSON.stringify(data) // Convierte el objeto a JSON para enviarlo en el cuerpo de la petición
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Sucursal creada exitosamente');
+                    // Actualizar la lista de sucursales o recargar la página
+                    location.reload(); // O recargar la página si es necesario
+                } else {
+                    alert('Error al crear la sucursal');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al crear la sucursal');
+            });
+        }
+    </script>
+</head>
+
+<style> 
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto; /* Centro horizontal */
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-container input,
+.form-container select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-container button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #007bff;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    position: relative; /* Permite que los submenús se posicionen correctamente */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del submenú */
+.submenu ul {
+    display: none; /* Ocultar el submenú por defecto */
+    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
+    background-color: #007bff;
+    top: 100%; /* Aparece justo debajo del padre */
+    left: 0;
+    min-width: 150px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
+}
+
+.submenu:hover ul {
+    display: block; /* Mostrar el submenú al pasar el ratón */
+}
+
+.submenu ul li {
+    width: 100%;
+    text-align: left;
+}
+
+.submenu ul li a {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .submenu ul {
+        position: static;
+        display: none;
+        background-color: #007bff;
+    }
+
+    .submenu:hover ul {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar ul li a {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .submenu ul {
+        min-width: 100%;
+    }
+}
+</style> 
+
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Crear Sucursal</h1>
+    </div>
+
+    <!-- Formulario para crear una sucursal -->
+    <div class="form-container">
+        <form onsubmit="crearSucursal(event);">
+            <div>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div>
+                <label for="provincia">Provincia:</label>
+                <select id="provincia" name="provincia" required>
+                    <option value="San José">San José</option>
+                    <option value="Alajuela">Alajuela</option>
+                    <option value="Cartago">Cartago</option>
+                    <option value="Heredia">Heredia</option>
+                    <option value="Guanacaste">Guanacaste</option>
+                    <option value="Puntarenas">Puntarenas</option>
+                    <option value="Limón">Limón</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" required pattern="\d+" title="Ingrese solo números">
+            </div>
+
+            <div>
+                <button type="submit">Crear Sucursal</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

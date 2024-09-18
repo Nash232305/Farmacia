@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales</title>
+    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}"> <!-- Archivo CSS -->
+
+    <script>
+        let selectedSucursalId = null; // Variable global para guardar el ID
+        let nuevoNombre = null;
+        let nuevaProvincia = null;
+        let nuevoTelefono = null;
+
+
+        function buscarSucursales() {
+            const query = document.getElementById('searchQuery').value;
+
+            fetch('/Sucursales?query=' + query)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sucursal-container').innerHTML = html;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchQuery');
+            searchInput.addEventListener('input', buscarSucursales);
+        });
+
+        function selectSucursal(element) {
+            console.log('Sucursal seleccionada');
+            // Remover la clase 'selected' de cualquier tarjeta previamente seleccionada
+            const prevSelected = document.querySelector('.sucursal-card.selected');
+            if (prevSelected) {
+                prevSelected.classList.remove('selected');
+            }
+            
+            // Obtener la información de la sucursal desde los atributos 'data-*'
+            selectedSucursalId = element.getAttribute('data-id');
+            const nombre = element.getAttribute('data-nombre');
+            const telefono = element.getAttribute('data-telefono');
+
+            // Actualizar la información en el modal
+            document.getElementById('modal-nombre').value = nombre;
+            document.getElementById('modal-telefono').value = telefono;
+
+            // Mostrar el modal
+            document.getElementById('sucursal-modal').style.display = 'block';
+        }
+
+
+        function closeModal() {
+            console.log('Cerrar modal');
+            // Ocultar el modal
+            document.getElementById('sucursal-modal').style.display = 'none';
+        }
+
+        function confirmUpdate(event) {
+            event.preventDefault(); // Evita el envío del formulario y la recarga de la página
+
+            // Obtén los nuevos valores de los campos del formulario
+            nuevoNombre = document.getElementById('modal-nombre').value;
+            nuevaProvincia = document.getElementById('modal-provincia').value;
+            nuevoTelefono = document.getElementById('modal-telefono').value;
+
+            // Aquí puedes agregar la lógica para actualizar la sucursal en tu base de datos o sistema
+            console.log('Confirmar modificación con los siguientes datos:');
+
+            // Actualizar la información en el modal
+            document.getElementById('modal-nombre-input').innerText = nuevoNombre;
+            document.getElementById('modal-provincia-input').innerText = nuevaProvincia;
+            document.getElementById('modal-telefono-input').innerText = nuevoTelefono;
+
+            // Cierra el modal después de la actualización
+            document.getElementById('sucursal-modal').style.display = 'none';
+            document.getElementById('confirm-Modify').style.display = 'block';
+    }
+
+        function cerrarConfirmacionModificacion() {
+            console.log('Cerrar confirmación');
+            // Ocultar el modal de confirmación
+            document.getElementById('confirm-Modify').style.display = 'none';
+        }
+
+        function modificarSucursal() {
+            console.log('Se modificó la sucursal');
+            if (!selectedSucursalId) {
+                alert('No se ha seleccionado ninguna sucursal.');
+                return;
+            }
+
+            // Crea un objeto con los nuevos datos de la sucursal
+            const data = {
+                nombre: nuevoNombre,
+                provincia: nuevaProvincia,
+                telefono: nuevoTelefono
+            };
+
+            // Realiza la petición PUT para modificar la sucursal
+            fetch(`/ModificarSucursal/${selectedSucursalId}`, {
+                method: 'PUT',  // Método HTTP correcto para actualizar recursos
+                headers: {
+                    'Content-Type': 'application/json'  // Añadir la cabecera para indicar el tipo de contenido
+                },
+                body: JSON.stringify(data) // Convierte el objeto a JSON para enviarlo en el cuerpo de la petición
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Sucursal modificada');
+                    // Actualizar la lista de sucursales o recargar la página
+                    location.reload(); // O recargar la página si es necesario
+                } else {
+                    alert('Error al modificar la sucursal');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al modificar la sucursal');
+            });
+
+            // Ocultar el modal de confirmación
+            document.getElementById('confirm-modify').style.display = 'none';
+        }
+        
+    </script>
+</head>
+
+<style> 
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #007bff;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    position: relative; /* Permite que los submenús se posicionen correctamente */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del submenú */
+.submenu ul {
+    display: none; /* Ocultar el submenú por defecto */
+    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
+    background-color: #007bff;
+    top: 100%; /* Aparece justo debajo del padre */
+    left: 0;
+    min-width: 150px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
+}
+
+.submenu:hover ul {
+    display: block; /* Mostrar el submenú al pasar el ratón */
+}
+
+.submenu ul li {
+    width: 100%;
+    text-align: left;
+}
+
+.submenu ul li a {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .submenu ul {
+        position: static;
+        display: none;
+        background-color: #007bff;
+    }
+
+    .submenu:hover ul {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar ul li a {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .submenu ul {
+        min-width: 100%;
+    }
+}
+
+/* Estilo de la galería de productos */
+.sucursal-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.sucursal-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.sucursal-card:hover {
+    transform: scale(1.05);
+}
+
+.sucursal-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-comprar {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-comprar:hover {
+    background-color: #0056b3;
+}
+
+.sucursal-card {
+    cursor: pointer;
+}
+
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}
+
+
+#modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+/* Estilos para el modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;  /* Centra verticalmente */
+    justify-content: center;  /* Centra horizontalmente */
+    z-index: 1000;
+    overflow: auto;  /* Permite el desplazamiento si el contenido es más grande que la ventana */
+}
+
+
+.modal-content input,
+.modal-content select {
+    font-size: 16px; /* Aumenta el tamaño del texto en los inputs y selects */
+    padding: 10px; /* Añade espacio interior a los inputs para hacerlos más grandes */
+    width: 50%; /* Asegura que los inputs ocupen todo el ancho disponible */
+    margin-bottom: 20px; /* Añade separación entre los campos */
+}
+
+/* Aumentar el tamaño del botón de confirmación */
+.modal-content button {
+    font-size: 18px; /* Aumenta el tamaño del texto en el botón */
+    padding: 12px 20px; /* Aumenta el tamaño del botón */
+    margin-top: 20px; /* Añade un poco más de espacio entre el último campo y el botón */
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    /* Centrar el contenido */
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Estilo para las tarjetas seleccionadas */
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}
+
+</style> 
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Sucursales Disponibles</h1>
+        <input type="text" id="searchQuery" class="search-input" placeholder="Buscar sucursal...">
+    </div>
+    <p class="sub-title">Seleccione la sucursal que desea modificar.</p>
+
+    <div id="sucursal-container" class="content">
+        <!-- Galería de Sucursales -->
+        <div class="sucursal-gallery" th:fragment="sucursal-gallery">
+            <div class="sucursal-card"
+                th:each="sucursal : ${sucursales}"
+                onclick="selectSucursal(this)"
+                th:data-id ="${sucursal.id}"
+                th:data-nombre="${sucursal.nombre}"
+                th:data-provincia="${sucursal.provincia}"
+                th:data-telefono= "${sucursal.telefono}">
+
+                <img src="https://diariofarma.com/wp-content/uploads/2018/12/Farmacia-Ja%C3%A9n_27.08.15-e1544535985370.jpg" alt="Imagen de la Sucursal" class="sucursal-img">
+                <h3 th:text="${sucursal.nombre}">Nombre de la Sucursal</h3>
+                <p>Provincia: <span th:text="${sucursal.provincia}">Provincia</span></p>
+                <p>Teléfono: <span th:text="${sucursal.telefono}">Teléfono</span></p>
+                <p>Fecha de Apertura: <span th:text="${#dates.format(sucursal.fechaApertura, 'dd/MM/yyyy')}">Fecha</span></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Mini ventana (Modal) -->
+    <dialog id="sucursal-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Información de la Sucursal Seleccionada</h2>
+            <form id="sucursal-form" onsubmit="confirmUpdate(event);">
+                
+                <div>
+                    <label for="modal-nombre-input">Nombre:</label>
+                    <input type="text" id="modal-nombre" name="nombre" required/>
+                </div>
+
+                <div>
+                    <label for="modal-provincia-input">Provincia:</label>
+                    <select id="modal-provincia" name="provincia" required>
+                        <option value="San José">San José</option>
+                        <option value="Alajuela">Alajuela</option>
+                        <option value="Cartago">Cartago</option>
+                        <option value="Heredia">Heredia</option>
+                        <option value="Guanacaste">Guanacaste</option>
+                        <option value="Puntarenas">Puntarenas</option>
+                        <option value="Limón">Limón</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modal-telefono-input">Teléfono:</label>
+                    <input type="text" id="modal-telefono" name="telefono" required pattern="\d+" title="Ingrese solo números">
+                </div>
+                
+                <button type="submit">Confirmar Modificación</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Confirmación de la modificacion -->
+    <div id="confirm-Modify" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarConfirmacionModificacion()">&times;</span>
+            <h2>Confirmación</h2>
+            <p>Nombre: <span id="modal-nombre-input"></span></p>
+            <p>Provincia: <span id="modal-provincia-input"></span></p>
+            <p>Teléfono: <span id="modal-telefono-input"></span></p>
+            <p>¿Estás seguro de que deseas modificar esta sucursal?</p>
+            <button onclick="modificarSucursal()">Sí, se modifico</button>
+            <button onclick="cerrarConfirmacionModificacion()">Cancelar</button>
+        </div>
+    </div>
+
+</body>
+</html>

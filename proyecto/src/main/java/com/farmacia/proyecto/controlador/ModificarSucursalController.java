@@ -1,10 +1,14 @@
 package com.farmacia.proyecto.controlador;
-
 import com.farmacia.proyecto.modelo.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.CallableStatement;
@@ -15,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class SucursalController {
-
+public class ModificarSucursalController {
+    
     @Autowired
     private Conexion conexion;
 
-    @GetMapping("/Sucursales")
+    @GetMapping("/ModificarSucursal")
     public String mostrarSucursales(@RequestParam(value = "query", required = false) String query, Model model) {
         List<Sucursal> sucursales;
         if (query != null && !query.isEmpty()) {
@@ -35,7 +39,7 @@ public class SucursalController {
             return "Sucursales :: sucursal-gallery"; // Solo devuelve la parte de la galería de sucursales
         }
         
-        return "Sucursales"; // Devolver la página completa de sucursales
+        return "ModificarSucursal"; // Devolver la página completa de sucursales
     }
 
     // Método para obtener todas las sucursales
@@ -74,7 +78,7 @@ public class SucursalController {
 
         try (Connection conn = conexion.conectar();
              CallableStatement stmt = conn.prepareCall(procedimiento)) {
-
+            
             stmt.setString(1, query);
             stmt.registerOutParameter(2, java.sql.Types.REF_CURSOR);
             stmt.execute();
@@ -95,5 +99,44 @@ public class SucursalController {
             e.printStackTrace();
         }
         return sucursales;
+    }
+
+
+    @PutMapping("/ModificarSucursal/{id}")
+    public ResponseEntity<String> modificarSucursal(
+        @PathVariable("id") int id,
+        @RequestBody Sucursal sucursalModificada) {
+
+        // Lógica para modificar la sucursal
+        boolean modificada = modificar(id, sucursalModificada);
+
+        if (modificada) {
+            return ResponseEntity.ok("Sucursal modificada exitosamente.");
+        } 
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sucursal no encontrada.");
+        }
+    }
+    
+    private boolean modificar(int Id, Sucursal sucursalModificada){
+
+        String procedimiento = "{ call actualizar_sucursal(?, ?, ?, ?) }";
+
+        try (Connection conn = conexion.conectar();
+             CallableStatement stmt = conn.prepareCall(procedimiento)) {
+
+            // Establecer los parámetros del procedimiento almacenado
+            stmt.setInt(1, Id);  // El ID de la sucursal
+            stmt.setString(2, sucursalModificada.getNombre());  // El nuevo nombre de la sucursal
+            stmt.setString(3, sucursalModificada.getProvincia());  // La nueva provincia de la sucursal
+            stmt.setString(4, sucursalModificada.getTelefono());  // El nuevo teléfono de la sucursal
+            stmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

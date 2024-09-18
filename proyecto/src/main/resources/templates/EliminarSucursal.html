@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"></html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sucursales</title>
-    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}">
-
+    <link rel="stylesheet" th:href="@{/css/stylesucursal.css}"> <!-- Archivo CSS -->
 
     <script>
+        let selectedSucursalId = null; // Variable global para guardar el ID
+
         function buscarSucursales() {
             const query = document.getElementById('searchQuery').value;
 
@@ -22,6 +22,77 @@
             const searchInput = document.getElementById('searchQuery');
             searchInput.addEventListener('input', buscarSucursales);
         });
+
+        function selectSucursal(element) {
+            console.log('Sucursal seleccionada');
+            // Remover la clase 'selected' de cualquier tarjeta previamente seleccionada
+            const prevSelected = document.querySelector('.sucursal-card.selected');
+            if (prevSelected) {
+                prevSelected.classList.remove('selected');
+            }
+
+            // Obtener la información de la sucursal desde los atributos 'data-*'
+            selectedSucursalId = element.getAttribute('data-id');
+            const nombre = element.getAttribute('data-nombre');
+            const provincia = element.getAttribute('data-provincia');
+            const telefono = element.getAttribute('data-telefono');
+            const fechaApertura = element.getAttribute('data-fecha-apertura');
+
+            // Actualizar la información en el modal
+            document.getElementById('modal-nombre').innerText = nombre;
+            document.getElementById('modal-provincia').innerText = provincia;
+            document.getElementById('modal-telefono').innerText = telefono;
+            document.getElementById('modal-fecha').innerText = fechaApertura;
+
+            // Mostrar el modal
+            document.getElementById('sucursal-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            console.log('Cerrar modal');
+            // Ocultar el modal
+            document.getElementById('sucursal-modal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            console.log('Confirmar eliminación');
+            // Ocultar el modal de sucursal y mostrar el modal de confirmación
+            document.getElementById('sucursal-modal').style.display = 'none';
+            document.getElementById('confirm-delete').style.display = 'block';
+        }
+
+        function closeConfirmDelete() {
+            console.log('Cerrar confirmación');
+            // Ocultar el modal de confirmación
+            document.getElementById('confirm-delete').style.display = 'none';
+        }
+
+        function deleteSucursal() {
+            if (!selectedSucursalId) {
+                alert('No se ha seleccionado ninguna sucursal.');
+                return;
+            }
+
+            fetch(`/EliminarSucursal/${selectedSucursalId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Sucursal eliminada');
+                    // Actualizar la lista de sucursales o recargar la página
+                    buscarSucursales(); // O recargar la página si es necesario
+                } else {
+                    alert('Error al eliminar la sucursal');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la sucursal');
+            });
+
+            // Ocultar el modal de confirmación
+            document.getElementById('confirm-delete').style.display = 'none';
+        }
     </script>
 </head>
 
@@ -178,6 +249,62 @@ body {
     background-color: #0056b3;
 }
 
+.sucursal-card {
+    cursor: pointer;
+}
+
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}
+
+
+#modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+/* Estilos para el modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;  /* Centra verticalmente */
+    justify-content: center;  /* Centra horizontalmente */
+    z-index: 1000;
+    overflow: auto;  /* Permite el desplazamiento si el contenido es más grande que la ventana */
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    /* Centrar el contenido */
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Estilo para las tarjetas seleccionadas */
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}
 </style> 
 
 <body>
@@ -225,18 +352,50 @@ body {
         <h1 class="main-title">Sucursales Disponibles</h1>
         <input type="text" id="searchQuery" class="search-input" placeholder="Buscar sucursal...">
     </div>
-    <p class="sub-title">Seleccione una sucursal para más detalles.</p>
+    <p class="sub-title">Seleccione la sucursal que desea eliminar.</p>
 
     <div id="sucursal-container" class="content">
         <!-- Galería de Sucursales -->
         <div class="sucursal-gallery" th:fragment="sucursal-gallery">
-            <div class="sucursal-card" th:each="sucursal : ${sucursales}">
+            <div class="sucursal-card"
+                th:each="sucursal : ${sucursales}"
+                onclick="selectSucursal(this)"
+                th:data-id ="${sucursal.id}"
+                th:data-nombre="${sucursal.nombre}"
+                th:data-provincia="${sucursal.provincia}"
+                th:data-telefono= "${sucursal.telefono}"
+                th:data-fecha-apertura="${#dates.format(sucursal.fechaApertura, 'dd/MM/yyyy')}">
+
                 <img src="https://diariofarma.com/wp-content/uploads/2018/12/Farmacia-Ja%C3%A9n_27.08.15-e1544535985370.jpg" alt="Imagen de la Sucursal" class="sucursal-img">
                 <h3 th:text="${sucursal.nombre}">Nombre de la Sucursal</h3>
                 <p>Provincia: <span th:text="${sucursal.provincia}">Provincia</span></p>
                 <p>Teléfono: <span th:text="${sucursal.telefono}">Teléfono</span></p>
                 <p>Fecha de Apertura: <span th:text="${#dates.format(sucursal.fechaApertura, 'dd/MM/yyyy')}">Fecha</span></p>
             </div>
+        </div>
+    </div>
+
+    <!-- Mini ventana (Modal) -->
+    <dialog id="sucursal-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Información de la Sucursal Seleccionada</h2>
+            <p>Nombre: <span id="modal-nombre"></span></p>
+            <p>Provincia: <span id="modal-provincia"></span></p>
+            <p>Teléfono: <span id="modal-telefono"></span></p>
+            <p>Fecha de Apertura: <span id="modal-fecha"></span></p>
+            <button onclick="confirmDelete()">Eliminar</button>
+        </div>
+    </dialog>
+
+    <!-- Confirmación de eliminación -->
+    <div id="confirm-delete" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmDelete()">&times;</span>
+            <h2>Confirmación</h2>
+            <p>¿Estás seguro de que deseas eliminar esta sucursal?</p>
+            <button onclick="deleteSucursal()">Sí, eliminar</button>
+            <button onclick="closeConfirmDelete()">Cancelar</button>
         </div>
     </div>
 
