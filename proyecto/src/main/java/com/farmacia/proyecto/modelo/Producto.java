@@ -12,6 +12,7 @@ public class Producto {
     private Integer cantidad;
     private int idFabricante;
     private int idProveedor;
+    private int idSucursal;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -44,4 +45,8 @@ public class Producto {
 
     public int getIdProveedor() { return idProveedor; }
     public void setIdProveedor(int idProveedor) { this.idProveedor = idProveedor; }
+
+    public int getIdSucursal() { return idSucursal; }
+    public void setIdSucursal(int idSucursal) { this.idSucursal = idSucursal; }
+    
 }
