@@ -16,7 +16,6 @@
         let nuevoSalario = null;
         let nuevoEmail = null;
         let nuevoNumeroTelefono = null;
-        let nuevoEstado = null;
         let nuevaidSucursal = null;
 
         function buscarEmpleados() {
@@ -36,6 +35,7 @@
 
         function selectEmpleado(element) {
             console.log('Empleado seleccionado');
+            console.log(element);
             const prevSelected = document.querySelector('.empleado-card.selected');
             if (prevSelected) {
                 prevSelected.classList.remove('selected');
@@ -48,6 +48,7 @@
             const telefono = element.getAttribute('data-telefono');
             const salario = element.getAttribute('data-salario');
             const edad = element.getAttribute('data-edad');
+            const estado = element.getAttribute('data-estado');
             const email = element.getAttribute('data-email');
             const sexo = element.getAttribute('data-sexo');
             const idsucursal = element.getAttribute('data-idsucursal');
@@ -60,7 +61,6 @@
             nuevoSalario = document.getElementById('modal-salario').value = salario;
             nuevoEmail = document.getElementById('modal-email').value = email;
             nuevoNumeroTelefono = document.getElementById('modal-numtelefono').value = telefono;
-            nuevoEstado = document.getElementById('modal-estado').value = estado;
             nuevaidSucursal = document.getElementById('modal-idsucursal').value = idsucursal;
 
             document.getElementById('empleado-modal').style.display = 'block';
@@ -81,7 +81,6 @@
             nuevoSalario = document.getElementById('modal-salario').value;
             nuevoEmail = document.getElementById('modal-email').value;
             nuevoNumeroTelefono = document.getElementById('modal-numtelefono').value;
-            nuevoEstado = document.getElementById('modal-estado').value;
             nuevaidSucursal = document.getElementById('modal-idsucursal').value;
 
             console.log('Confirmar modificación con los siguientes datos:');
@@ -94,7 +93,6 @@
             document.getElementById('modal-salario-input').innerText = nuevoSalario;
             document.getElementById('modal-email-input').innerText = nuevoEmail;
             document.getElementById('modal-numtelefono-input').innerText = nuevoNumeroTelefono;
-            document.getElementById('modal-estado-input').innerText = nuevoEstado;
             document.getElementById('modal-idsucursal-input').innerText = nuevaidSucursal;
 
             document.getElementById('empleado-modal').style.display = 'none';
@@ -119,7 +117,6 @@
                 apellido: nuevoApellido,
                 sexo: nuevoSexo,
                 edad: nuevaEdad,
-                estado: nuevoEstado,
                 salario: nuevoSalario,
                 email: nuevoEmail,
                 numeroTelefono: nuevoNumeroTelefono,
@@ -390,7 +387,7 @@ body {
             <!-- Aquí se cargará dinámicamente la galería de empleados -->
             <div class="empleado-card"
                 th:each="empleado : ${empleados}"
-                onclick= selectEmpleado(this) 
+                onclick="selectEmpleado(this)"
                 th:data-id ="${empleado.id}"
                 th:data-nombre="${empleado.nombre}"
                 th:data-apellido="${empleado.apellido}"
@@ -456,13 +453,6 @@ body {
                     <input type="text" id="modal-numtelefono" name="telefono" required pattern="\d+" title="Ingrese solo números">
                 </div>
                 <div>
-                    <label for="modal-estado">Estado:</label>
-                    <select id="modal-estado" name="estado" required>
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
-                    </select>
-                </div>
-                <div>
                     <label for="modal-idsucursal">Sucursal:</label>
                     <input type="text" id="modal-idsucursal" name="sucursal" required/>
                 </div>
@@ -484,7 +474,6 @@ body {
             <p>Salario: <span id="modal-salario-input"></span></p>
             <p>Email: <span id="modal-email-input"></span></p>
             <p>Teléfono: <span id="modal-numtelefono-input"></span></p>
-            <p>Estado: <span id="modal-estado-input"></span></p>
             <p>Sucursal: <span id="modal-idsucursal-input"></span></p>
             <p>¿Estás seguro de que deseas modificar este empleado?</p>
             <button onclick="modificarEmpleado()">Sí, se modificó</button>

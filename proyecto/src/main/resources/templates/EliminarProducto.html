@@ -80,7 +80,7 @@
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#">Empleados</a>
+                <a href="/Empleados">Empleados</a>
                 <ul>
                     <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
                     <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
@@ -90,7 +90,7 @@
             <li class="submenu">
                 <a href="#">Reportes productos</a>
                 <ul>
-                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
                     <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
                 </ul>
             </li>
@@ -117,6 +117,8 @@
                 <p>Fecha de Vencimiento: <span th:text="${#dates.format(producto.fechaVencimiento, 'dd/MM/yyyy')}">dd/MM/yyyy</span></p>
                 <p>Precio: <span th:text="${#numbers.formatDecimal(producto.costo, 1, 'POINT', 2, 'COMMA')}">0.00</span> CRC</p>
                 <p>Cantidad: <span th:text="${producto.cantidad}">0</span></p>
+                <p>ID Sucursal: <span th:text="${producto.idSucursal}">0</span></p>
+                
                 <button class="btn-eliminar" th:onclick="'javascript:eliminarProducto(' + ${producto.id} + ');'">Eliminar</button>
             </div>
         </div>

@@ -16,8 +16,9 @@
             const idFabricante = document.getElementById('idFabricante').value;
             const idProveedor = document.getElementById('idProveedor').value;
             const cantidad = document.getElementById('cantidad').value;
+            const idSucursal = document.getElementById('idSucursal').value;
 
-            if (!id || !nombre || !descripcion || !fechaVencimiento || !costo || !idFabricante || !idProveedor || !cantidad) {
+            if (!id || !nombre || !descripcion || !fechaVencimiento || !costo || !idFabricante || !idProveedor || !cantidad || !idSucursal) {
                 alert("Todos los campos son obligatorios.");
                 return false;
             }
@@ -57,7 +58,7 @@
             <li class="submenu">
                 <a href="#">Reportes productos</a>
                 <ul>
-                    <li><a href="/ReporteVentas">Reporte de Ventas</a></li>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
                     <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
                 </ul>
             </li>
@@ -143,6 +144,30 @@
                         </table>
                     </div>
                 </div>
+
+
+                <!-- Sección de IDs y Nombres de Sucursales activas -->
+                    <div class="id-section">
+                        <h3>IDs y Nombres de Sucursales activas:</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Sucursal</th>
+                                        <th>Nombre de Sucursal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Itera sobre los IDs y nombres de SUCURSAL -->
+                                    <tr th:each="sucursal : ${sucursales}">
+                                        <td th:text="${sucursal.id}">ID</td>
+                                        <td th:text="${sucursal.nombre}">Nombre</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
             </div>
 
 
@@ -181,6 +206,10 @@
                     <!-- Campo de entrada para la Cantidad -->
                     <label for="cantidad">Cantidad:</label>
                     <input type="number" id="cantidad" th:field="*{cantidad}" required>
+
+                    <!-- Campo de entrada para el ID del Proveedor -->
+                    <label for="idSucursal">ID Sucursal:</label>
+                    <input type="number" id="idSucursal" th:field="*{idSucursal}" required>
                     
                     <!-- Botón para enviar el formulario -->
                     <button type="submit">Agregar Producto</button>

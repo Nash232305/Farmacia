@@ -28,7 +28,7 @@
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#">Empleados</a>
+                <a th:href="@{/Empleados}">Empleados</a>
                 <ul>
                     <li><a th:href="@{/AgregarEmpleado}">Agregar Empleado</a></li>
                     <li><a th:href="@{/ModificarEmpleado}">Modificar Empleado</a></li>
@@ -38,8 +38,8 @@
             <li class="submenu">
                 <a href="#">Reportes productos</a>
                 <ul>
-                    <li><a th:href="@{/ReporteVentas}">Reporte de Ventas</a></li>
-                    <li><a th:href="@{/ReporteInventario}">Reporte de Inventario</a></li>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
                 </ul>
             </li>
             <li><a th:href="@{/Login}">Cerrar Sesión</a></li>

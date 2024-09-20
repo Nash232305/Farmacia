@@ -2,7 +2,6 @@ package com.farmacia.proyecto.controlador;
 
 import com.farmacia.proyecto.modelo.Producto;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -141,6 +140,11 @@ public class ProductoController {
         List<Map<String, Object>> fabricantes = obtenerIdsYNombreDeFabricantes();
         model.addAttribute("fabricantes", fabricantes);
 
+        // Obtener sucursales
+        List<Map<String, Object>> sucursales = obtenerIdsYNombresDeSucursales();
+        model.addAttribute("sucursales", sucursales);
+        
+
         return "AgregarProducto";
     }
 
@@ -154,7 +158,10 @@ public class ProductoController {
             producto.getFechaVencimiento() == null ||  
             producto.getCosto() == null || producto.getCosto() <= 0 ||
             producto.getIdFabricante() <= 0 || producto.getIdProveedor() <= 0 ||
-            producto.getCantidad() == null || producto.getCantidad() <= 0) {
+            producto.getCantidad() == null || producto.getCantidad() <= 0  ||
+            producto.getIdSucursal() <= 0)
+        {
+                
             
             model.addAttribute("errorMessage", "Todos los campos son obligatorios y deben ser válidos.");
             cargarDatosParaVista(model);  // Recarga las listas necesarias
@@ -181,6 +188,12 @@ public class ProductoController {
                 cargarDatosParaVista(model);  // Recarga las listas necesarias
                 return "AgregarProducto";
             }
+            if (!obtenerIdsDeSucursales().contains(producto.getIdSucursal())) {
+                model.addAttribute("errorMessage", "El ID de la sucursal no existe.");
+                cargarDatosParaVista(model);  // Recarga las listas necesarias
+                return "AgregarProducto";
+                
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,7 +204,7 @@ public class ProductoController {
 
         try {
             // Llamada directa al procedimiento almacenado usando JdbcTemplate
-            String sql = "CALL PCK_CRUD_PRODUCTOS.C_PRODUCTO(?, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
+            String sql = "CALL PCK_CRUD_PRODUCTOS.C_PRODUCTO(?, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql,
                 producto.getId(),
                 producto.getNombre(),
@@ -200,7 +213,8 @@ public class ProductoController {
                 producto.getCosto(),
                 producto.getIdFabricante(),
                 producto.getIdProveedor(),
-                producto.getCantidad()
+                producto.getCantidad(),
+                producto.getIdSucursal()
             );
 
             System.out.println("Producto agregado correctamente.");
@@ -224,6 +238,9 @@ public class ProductoController {
 
         List<Map<String, Object>> fabricantes = obtenerIdsYNombreDeFabricantes();
         model.addAttribute("fabricantes", fabricantes);
+
+        List<Map<String, Object>> sucursales = obtenerIdsYNombresDeSucursales();
+        model.addAttribute("sucursales", sucursales);
     }   
     
 
@@ -280,6 +297,51 @@ public class ProductoController {
         }
         return ids;
     }
+
+    private List<Map<String, Object>> obtenerIdsYNombresDeSucursales() {
+        List<Map<String, Object>> sucursal = new ArrayList<>();
+        String procedimiento = "{ call sp_obtener_sucursales_activas(?) }";
+        try (Connection conn = conexion.conectar();
+             CallableStatement stmt = conn.prepareCall(procedimiento)) {
+            
+            stmt.registerOutParameter(1, java.sql.Types.REF_CURSOR);
+            stmt.execute();
+            
+            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+                while (rs.next()) {
+                    Map<String, Object> sucursales = new HashMap<>();
+                    sucursales.put("id", rs.getInt("ID"));
+                    sucursales.put("nombre", rs.getString("NOMBRE"));
+                    sucursal.add(sucursales);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sucursal;
+    }
+    
+
+    private List<Integer> obtenerIdsDeSucursales() {
+        List<Integer> sucursal = new ArrayList<>();
+        String procedimiento = "{ call sp_obtener_sucursales_activas(?) }";
+        try (Connection conn = conexion.conectar();
+             CallableStatement stmt = conn.prepareCall(procedimiento)) {
+            
+            stmt.registerOutParameter(1, java.sql.Types.REF_CURSOR);
+            stmt.execute();
+            
+            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+                while (rs.next()) {
+                    sucursal.add(rs.getInt("ID"));  // Solo agrega el ID
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sucursal;
+    }
+    
 
     private List<Producto> obtenerIdsYNombreDeProductos() {
         List<Producto> productos = new ArrayList<>();
@@ -394,6 +456,7 @@ public class ProductoController {
             @RequestParam(value = "idFabricante", required = false) Integer idFabricanteNuevo,
             @RequestParam(value = "idProveedor", required = false) Integer idProveedorNuevo,
             @RequestParam(value = "cantidad", required = false) Integer cantidadNueva,
+            @RequestParam(value = "idSucursal", required = false) Integer idSucursalNuevo,
             Model model) {
 
         try {
@@ -412,8 +475,15 @@ public class ProductoController {
                 return "ModificarProducto";
             }
 
+            //valdiar si el id de la sucursal es valido
+            if(idSucursalNuevo != null && !idSucursalExiste(idSucursalNuevo)){
+                model.addAttribute("mensajeError", "El ID de la sucursal no existe. Verifique los datos ingresados.");
+                cargarDatosParaVista(model); // Carga de nuevo los datos necesarios
+                return "ModificarProducto";
+            }
+
             // Procedimiento para modificar el producto
-            String procedimiento = "{ call PCK_CRUD_PRODUCTOS.U_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?) }";
+            String procedimiento = "{ call PCK_CRUD_PRODUCTOS.U_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?,?) }";
 
             try (Connection conn = conexion.conectar();
                 CallableStatement stmt = conn.prepareCall(procedimiento)) {
@@ -434,6 +504,7 @@ public class ProductoController {
                 stmt.setInt(6, idFabricanteNuevo != null ? idFabricanteNuevo : null);
                 stmt.setInt(7, idProveedorNuevo != null ? idProveedorNuevo : null);
                 stmt.setInt(8, cantidadNueva != null ? cantidadNueva : null);
+                stmt.setInt(9, idSucursalNuevo != null ? idSucursalNuevo : null);
 
                 stmt.execute();
                 model.addAttribute("mensajeExito", "Producto modificado correctamente.");
@@ -474,6 +545,12 @@ public class ProductoController {
         return count > 0;
     }
 
+    private boolean idSucursalExiste(int idSucursal) {
+        String sql = "SELECT COUNT(*) FROM SUCURSAL_FARMACIA WHERE ID = ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, idSucursal);
+        return count > 0;
+    }
+
     private List<Producto> obtenerProductosPorNombre(String nombre) {
         List<Producto> productos = new ArrayList<>();
         String procedimiento = "{ call PCK_CRUD_PRODUCTOS.sp_obtener_producto_por_nombre(?, ?) }";
@@ -496,6 +573,7 @@ public class ProductoController {
                     producto.setCantidad(rs.getInt("CANTIDAD"));
                     producto.setIdFabricante(rs.getInt("IDFABRICANTE"));
                     producto.setIdProveedor(rs.getInt("IDPROVEEDOR"));
+                    
                     productos.add(producto);
                 }
             }
@@ -556,6 +634,7 @@ public class ProductoController {
                     producto.setIdFabricante(rs.getInt("IDFABRICANTE"));
                     producto.setIdProveedor(rs.getInt("IDPROVEEDOR"));
                     producto.setCantidad(rs.getInt("CANTIDAD"));
+                    producto.setIdSucursal(rs.getInt("IDSUCURSAL"));
                     productos.add(producto);
                 }
             }
@@ -588,6 +667,7 @@ public class ProductoController {
                     producto.setIdFabricante(rs.getInt("IDFABRICANTE"));
                     producto.setIdProveedor(rs.getInt("IDPROVEEDOR"));
                     producto.setCantidad(rs.getInt("CANTIDAD"));
+                    producto.setIdSucursal(rs.getInt("IDSUCURSAL"));
                     productos.add(producto);
                 }
             }
