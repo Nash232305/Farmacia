@@ -6,7 +6,38 @@ body {
     padding: 0;
 }
 
+/* Barra de navegación */
+.navbar {
+    background-color: #007bff;
+    padding: 15px;
+    text-align: center;
+}
 
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    position: relative; /* Permite que los submenús se posicionen correctamente */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3;
+}
 
 .header-container {
     display: flex;
@@ -47,38 +78,8 @@ body {
     color: #666;
 }
 
-/* Barra de navegación */
-.navbar {
-    background-color: #007bff;
-    padding: 15px;
-    text-align: center;
-}
 
-.navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
 
-.navbar ul li {
-    margin: 0 15px;
-    position: relative; /* Permite que los submenús se posicionen correctamente */
-}
-
-.navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 8px 16px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.navbar ul li a:hover {
-    background-color: #0056b3;
-}
 
 /* Estilo del submenú */
 .submenu ul {
@@ -148,15 +149,15 @@ body {
     }
 }
 
-/* Estilo de la galería de empleados */
-.empleado-gallery {
+/* Estilo de la galería de productos */
+.sucursal-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
-.empleado-card {
+.sucursal-card {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -165,14 +166,110 @@ body {
     transition: transform 0.3s;
 }
 
-.empleado-card:hover {
+.sucursal-card:hover {
     transform: scale(1.05);
 }
 
-.empleado-img {
+.sucursal-img {
     width: 100%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
+.btn-comprar {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-comprar:hover {
+    background-color: #0056b3;
+}
+
+.sucursal-card {
+    cursor: pointer;
+}
+
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}
+
+
+#modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+/* Estilos para el modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;  /* Centra verticalmente */
+    justify-content: center;  /* Centra horizontalmente */
+    z-index: 1000;
+    overflow: auto;  /* Permite el desplazamiento si el contenido es más grande que la ventana */
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Centra el contenido dentro del modal */
+}
+
+
+/* Estilo para el botón de eliminar */
+button {
+    background-color: #d9534f;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #c9302c;
+    transform: translateY(-2px);
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #f00;
+}
+
+/* Estilo para las tarjetas seleccionadas */
+.sucursal-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
+}

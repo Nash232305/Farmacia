@@ -5,7 +5,11 @@ import com.farmacia.proyecto.modelo.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.CallableStatementCreator;
+import org.springframework.jdbc.core.CallableStatementCreatorFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +26,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Types;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,8 +194,8 @@ public class ProductoController {
             }
             if (!obtenerIdsDeSucursales().contains(producto.getIdSucursal())) {
                 model.addAttribute("errorMessage", "El ID de la sucursal no existe.");
-                cargarDatosParaVista(model);  // Recarga las listas necesarias
-                return "AgregarProducto";
+                cargarDatosParaVista(model); // Recarga las listas necesarias
+                return "AgregarProducto";         
                 
             }
 
@@ -238,6 +242,7 @@ public class ProductoController {
 
         List<Map<String, Object>> fabricantes = obtenerIdsYNombreDeFabricantes();
         model.addAttribute("fabricantes", fabricantes);
+
 
         List<Map<String, Object>> sucursales = obtenerIdsYNombresDeSucursales();
         model.addAttribute("sucursales", sucursales);
@@ -421,6 +426,11 @@ public class ProductoController {
         model.addAttribute("productos", new ArrayList<Producto>());
         model.addAttribute("mensajeError", "Por favor, realice una búsqueda para modificar un producto.");
         
+        
+        // Obtener sucursales
+        List<Map<String, Object>> sucursales = obtenerIdsYNombresDeSucursales();
+        model.addAttribute("sucursales", sucursales);
+
         return "ModificarProducto"; // Nombre del archivo HTML
     }
 
@@ -442,6 +452,8 @@ public class ProductoController {
         // Cargar los datos de proveedores y fabricantes para la vista
         model.addAttribute("proveedores", obtenerIdsYNombreDeProveedores());
         model.addAttribute("fabricantes", obtenerIdsYNombreDeFabricantes());
+        model.addAttribute("sucursales", obtenerIdsYNombresDeSucursales());
+
 
         return "ModificarProducto";
     }
@@ -456,100 +468,131 @@ public class ProductoController {
             @RequestParam(value = "idFabricante", required = false) Integer idFabricanteNuevo,
             @RequestParam(value = "idProveedor", required = false) Integer idProveedorNuevo,
             @RequestParam(value = "cantidad", required = false) Integer cantidadNueva,
-            @RequestParam(value = "idSucursal", required = false) Integer idSucursalNuevo,
+            @RequestParam(value = "idSucursal", required = false) Integer idSucursal,
             Model model) {
-
+       
+            
+    
         try {
-            // Valida si el producto existe
+            // Validación del producto existente
             if (!productoExiste(id)) {
                 model.addAttribute("mensajeError", "El producto no existe.");
-                cargarDatosParaVista(model); // Carga de nuevo los datos necesarios
                 return "ModificarProducto";
             }
 
-            // Valida si los IDs del fabricante y proveedor son válidos
-            if ((idProveedorNuevo != null && !idProveedorExiste(idProveedorNuevo)) || 
-                (idFabricanteNuevo != null && !idFabricanteExiste(idFabricanteNuevo))) {
-                model.addAttribute("mensajeError", "El ID del proveedor o fabricante no existe. Verifique los datos ingresados.");
-                cargarDatosParaVista(model); // Carga de nuevo los datos necesarios
+            // Validación de proveedor y fabricante
+            if (idProveedorNuevo != null && !idProveedorExiste(idProveedorNuevo)) {
+                model.addAttribute("mensajeError", "El ID del proveedor no existe.");
                 return "ModificarProducto";
             }
 
-            //valdiar si el id de la sucursal es valido
-            if(idSucursalNuevo != null && !idSucursalExiste(idSucursalNuevo)){
-                model.addAttribute("mensajeError", "El ID de la sucursal no existe. Verifique los datos ingresados.");
-                cargarDatosParaVista(model); // Carga de nuevo los datos necesarios
+            if (idFabricanteNuevo != null && !idFabricanteExiste(idFabricanteNuevo)) {
+                model.addAttribute("mensajeError", "El ID del fabricante no existe.");
                 return "ModificarProducto";
             }
 
+            if (idSucursal != null && !idSucursalExiste(idSucursal)) {
+                model.addAttribute("mensajeError", "El ID de la sucursal no existe.");
+                return "ModificarProducto";
+            }
+
+
+        
             // Procedimiento para modificar el producto
-            String procedimiento = "{ call PCK_CRUD_PRODUCTOS.U_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?,?) }";
-
+            String procedimiento = "{ call PCK_CRUD_PRODUCTOS.U_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
+    
             try (Connection conn = conexion.conectar();
-                CallableStatement stmt = conn.prepareCall(procedimiento)) {
-
-                // Asignar parámetros al procedimiento
+                 CallableStatement stmt = conn.prepareCall(procedimiento)) {
+    
+                // Asignación de parámetros
                 stmt.setInt(1, id);
                 stmt.setString(2, nombreNuevo != null && !nombreNuevo.isEmpty() ? nombreNuevo : null);
                 stmt.setString(3, descripcionNueva != null && !descripcionNueva.isEmpty() ? descripcionNueva : null);
-
+    
                 // Manejo de la fecha de vencimiento
                 if (fechaVencimientoNueva != null && !fechaVencimientoNueva.isEmpty()) {
                     stmt.setDate(4, java.sql.Date.valueOf(fechaVencimientoNueva));
                 } else {
                     stmt.setNull(4, java.sql.Types.DATE);
                 }
-
+    
                 stmt.setDouble(5, costoNuevo != null ? costoNuevo : null);
                 stmt.setInt(6, idFabricanteNuevo != null ? idFabricanteNuevo : null);
                 stmt.setInt(7, idProveedorNuevo != null ? idProveedorNuevo : null);
                 stmt.setInt(8, cantidadNueva != null ? cantidadNueva : null);
-                stmt.setInt(9, idSucursalNuevo != null ? idSucursalNuevo : null);
-
+                stmt.setInt(9, idSucursal != null ? idSucursal : null);
+    
                 stmt.execute();
                 model.addAttribute("mensajeExito", "Producto modificado correctamente.");
-
             }
         } catch (SQLException e) {
-            if (e.getErrorCode() == 2291) { // Código de error de clave foránea
-                model.addAttribute("mensajeError", "El ID del proveedor o fabricante no existe. Verifique los datos ingresados.");
+            if (e.getErrorCode() == 2291) { // Error de clave foránea
+                model.addAttribute("mensajeError", "El ID del proveedor o fabricante no existe en la base de datos.");
             } else {
                 model.addAttribute("mensajeError", "Error al modificar el producto: " + e.getMessage());
             }
             return "ModificarProducto";
         }
-
-        return "Productos";
+    
+        return "redirect:/Productos";
     }
-
+    
 
 
     // Método para verificar si el producto existe
     private boolean productoExiste(int id) {
-        String sql = "SELECT COUNT(*) FROM PRODUCTO_FARMACIA WHERE ID = ?";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        String sql = "{ call sp_producto_existe(?, ?) }";
+        CallableStatementCreatorFactory factory = new CallableStatementCreatorFactory(sql);
+        factory.addParameter(new SqlParameter(Types.INTEGER));
+        factory.addParameter(new SqlOutParameter("p_count", Types.INTEGER));
+        @SuppressWarnings("unchecked")
+        CallableStatementCreator creator = factory.newCallableStatementCreator((Map<String, ?>) List.of(id));
+        Map<String, Object> result = jdbcTemplate.call(creator, Collections.emptyList());
+        int count = (Integer) result.get("p_count");
         return count > 0;
     }
 
-    // Método para verificar si el ID del proveedor existe
     private boolean idProveedorExiste(int idProveedor) {
-        String sql = "SELECT COUNT(*) FROM PROVEEDOR_FARMACIA WHERE ID = ?";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class, idProveedor);
+        String sql = "{ call sp_proveedor_existe(?, ?) }";
+        CallableStatementCreatorFactory factory = new CallableStatementCreatorFactory(sql);
+        factory.addParameter(new SqlParameter(Types.INTEGER));
+        factory.addParameter(new SqlOutParameter("p_count", Types.INTEGER));
+        @SuppressWarnings("unchecked")
+        CallableStatementCreator creator = factory.newCallableStatementCreator((Map<String, ?>) List.of(idProveedor));
+        Map<String, Object> result = jdbcTemplate.call(creator, Collections.emptyList());
+        int count = (Integer) result.get("p_count");
         return count > 0;
     }
+    
+    
+
 
     // Método para verificar si el ID del fabricante existe
     private boolean idFabricanteExiste(int idFabricante) {
-        String sql = "SELECT COUNT(*) FROM FABRICANTE_FARMACIA WHERE ID = ?";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class, idFabricante);
+        String sql = "{ call sp_fabricante_existe(?, ?) }";
+        CallableStatementCreatorFactory factory = new CallableStatementCreatorFactory(sql);
+        factory.addParameter(new SqlParameter(Types.INTEGER));
+        factory.addParameter(new SqlOutParameter("p_count", Types.INTEGER));
+        @SuppressWarnings("unchecked")
+        CallableStatementCreator creator = factory.newCallableStatementCreator((Map<String, ?>) List.of(idFabricante));
+        Map<String, Object> result = jdbcTemplate.call(creator, Collections.emptyList());
+        int count = (Integer) result.get("p_count");
         return count > 0;
     }
+    
 
     private boolean idSucursalExiste(int idSucursal) {
-        String sql = "SELECT COUNT(*) FROM SUCURSAL_FARMACIA WHERE ID = ?";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class, idSucursal);
+        String sql = "{ call sp_sucursal_existe(?, ?) }";
+        CallableStatementCreatorFactory factory = new CallableStatementCreatorFactory(sql);
+        factory.addParameter(new SqlParameter(Types.INTEGER));
+        factory.addParameter(new SqlOutParameter("p_count", Types.INTEGER));
+        @SuppressWarnings("unchecked")
+        CallableStatementCreator creator = factory.newCallableStatementCreator((Map<String, ?>) List.of(idSucursal));
+        Map<String, Object> result = jdbcTemplate.call(creator, Collections.emptyList());
+        int count = (Integer) result.get("p_count");
         return count > 0;
     }
+    
 
     private List<Producto> obtenerProductosPorNombre(String nombre) {
         List<Producto> productos = new ArrayList<>();
@@ -573,6 +616,7 @@ public class ProductoController {
                     producto.setCantidad(rs.getInt("CANTIDAD"));
                     producto.setIdFabricante(rs.getInt("IDFABRICANTE"));
                     producto.setIdProveedor(rs.getInt("IDPROVEEDOR"));
+                    producto.setIdSucursal(rs.getInt("IDSUCURSAL"));
                     
                     productos.add(producto);
                 }

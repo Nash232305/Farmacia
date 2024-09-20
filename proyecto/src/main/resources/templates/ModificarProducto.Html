@@ -36,7 +36,7 @@
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#">Reportes productos</a>
+                <a href="/ReportesProductos">Reportes productos</a>
                 <ul>
                     <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
                     <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
@@ -49,7 +49,6 @@
     <!-- Contenedor Principal -->
     <div class="container">
         <!-- Formulario de Búsqueda -->
-    
         <div id="buscarProducto" class="form-container">
             <h2>Buscar Producto</h2>
             <form th:action="@{/buscarProducto}" method="post">
@@ -67,7 +66,6 @@
         <div th:if="${mensajeExito}" class="success-message">
             <p th:text="${mensajeExito}"></p>
         </div>
-
 
         <!-- Contenedor flexible para las tablas y el formulario -->
         <div th:if="${productoEncontrado != null and productoEncontrado}" class="flex-container">
@@ -114,6 +112,29 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Sección de IDs y Nombres de Sucursales -->
+                <div class="id-section">
+                    <h3>IDs y Nombres de Sucursales activas:</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID Sucursal</th>
+                                    <th>Nombre de Sucursal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="sucursal : ${sucursales}">
+                                    <td th:text="${sucursal['id']}"></td>
+                                    <td th:text="${sucursal['nombre']}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                
             </div>
 
             <!-- Formularios de Modificación alineados a la derecha -->
@@ -154,6 +175,14 @@
                             <label>ID Proveedor:</label>
                             <input type="text" name="idProveedor" th:value="${producto.idProveedor}" class="input-text">
                         </div>
+
+                        <div class="form-group">
+                            <label>ID Sucursal:</label>
+                            <input type="text" name="idSucursal" th:value="${producto.idSucursal}" class="input-text">
+                        </div>
+                        
+
+
                         <!-- Botón para modificar -->
                         <button type="submit" class="button" onclick="return confirm('¿Está seguro de que desea modificar este producto?')">Modificar</button>
                     </form>
@@ -161,5 +190,10 @@
             </div>
         </div>
     </div>
+
+
+
+    
+    
 </body>
 </html>

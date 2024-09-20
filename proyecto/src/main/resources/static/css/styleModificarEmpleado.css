@@ -1,11 +1,10 @@
-/* Estilo general */
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
 }
-
 
 
 .header-container {
@@ -64,7 +63,7 @@ body {
 
 .navbar ul li {
     margin: 0 15px;
-    position: relative; /* Permite que los submenús se posicionen correctamente */
+    position: relative;
 }
 
 .navbar ul li a {
@@ -82,21 +81,21 @@ body {
 
 /* Estilo del submenú */
 .submenu ul {
-    display: none; /* Ocultar el submenú por defecto */
-    position: absolute; /* Posicionar el submenú justo debajo del elemento padre */
+    display: none;
+    position: absolute;
     background-color: #007bff;
-    top: 100%; /* Aparece justo debajo del padre */
+    top: 100%;
     left: 0;
     min-width: 150px;
     padding: 0;
     margin: 0;
     list-style: none;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Asegura que el submenú aparezca encima de otros elementos */
+    z-index: 1000;
 }
 
 .submenu:hover ul {
-    display: block; /* Mostrar el submenú al pasar el ratón */
+    display: block;
 }
 
 .submenu ul li {
@@ -169,10 +168,88 @@ body {
     transform: scale(1.05);
 }
 
-.empleado-img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
+.empleado-card.selected {
+    border: 2px solid #4CAF50;
+    background-color: #f0f8ff;
 }
 
+/* Estilo del modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Fondo más oscuro para mayor contraste */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: auto;
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center; /* Centra el texto y los elementos internos */
+}
+
+/* Input y Select dentro del modal */
+.modal-content input,
+.modal-content select {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+    width: calc(100% - 20px); /* Ajusta el ancho para mantener margen interior */
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Botón de acción del modal */
+.modal-content button {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #000;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Productos</title>
+    <link rel="stylesheet" th:href="@{/css/stylesReporteProductos.css}"> <!-- Archivo CSS -->
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/ReportesProductos">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="main-container">
+        <h1>Resumen de Productos</h1>
+        <div class="summary-panel">
+            <div class="summary-card">
+                <h2>Total de Productos</h2>
+                <p th:text="${totalProductos}">--</p>
+            </div>
+            <div class="summary-card">
+                <h2>Productos con Stock Bajo</h2>
+                <p th:text="${stockBajo}">--</p>
+            </div>
+            <div class="summary-card">
+                <h2>Productos Próximos a Vencer</h2>
+                <p th:text="${proximosVencer}">--</p>
+            </div>
+            <div class="summary-card">
+                <h2>Sucursales Activas</h2>
+                <p th:text="${sucursalesActivas}">--</p>
+            </div>
+        </div>
+
+        <!-- Tabla para mostrar productos próximos a vencer -->
+        <div class="products-section">
+            <h2>Productos Próximos a Vencer</h2>
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Cantidad</th>
+                        <th>Sucursal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="producto : ${productosProximosVencer}">
+                        <td th:text="${producto.id}">1</td>
+                        <td th:text="${producto.nombre}">Producto</td>
+                        <td th:text="${producto.descripcion}">Descripción</td>
+                        <td th:text="${#dates.format(producto.fechaVencimiento, 'dd/MM/yyyy')}">01/01/2024</td>
+                        <td th:text="${producto.cantidad}">10</td>
+                        <td th:text="${producto.nombreSucursal}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -22,16 +22,14 @@ body {
 }
 
 /* Contenedor de la imagen de fondo */
-/* Contenedor de la imagen de fondo */
 .image-container {
     width: 50%;
-    height: 100%; /* Asegura que el contenedor ocupe todo el alto disponible */
+    height: 100%;
     background-image: url('https://cloudfront-us-east-1.images.arcpublishing.com/infobae/7FA35Y3W3ZBZZIG4JFFQF24UDI.jpg');
-    background-size: cover; /* Cambiado de cover a contain para ajustar el tamaño */
+    background-size: cover;
     background-position: center;
-    background-repeat: no-repeat; /* Evitar que la imagen se repita */
+    background-repeat: no-repeat;
 }
-
 
 /* Contenedor del login */
 .login-container {
@@ -108,4 +106,44 @@ body {
 .button-group button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+}
+
+/* Estilo adicional para el mensaje de error */
+.error-message {
+    color: #d9534f; /* Color rojo suave */
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: block;
+    font-weight: bold;
+}
+
+/* Estilo adicional para animar la aparición del mensaje */
+.error-message.show {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Opcional: Estilo de los inputs con error */
+.input-group input:invalid {
+    border-color: transparent; /* Elimina el borde rojo */
+    box-shadow: none; /* Elimina cualquier sombra roja */
+}
+
+/* Estilo para resaltar los mensajes de error en lugar del borde */
+.input-group input:focus + .error-message.show {
+    border: 1px solid #f8d7da; /* Borde ligero y sutil para el contenedor */
+    background-color: #f8d7da; /* Color de fondo sutil para el mensaje de error */
+    padding: 5px;
+    border-radius: 5px;
 }

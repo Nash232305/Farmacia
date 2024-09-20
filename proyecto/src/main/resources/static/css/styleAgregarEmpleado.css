@@ -4,48 +4,110 @@ body {
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+    color: #333;
 }
-
-
-
+/* Contenedor del encabezado */
 .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centra los elementos horizontalmente */
-    padding: 20px;
-    gap: 20px; /* Espacio entre el título y la barra de búsqueda */
-    margin: 0 auto; /* Centra el contenedor en el medio de la página */
-    position: relative; /* Necesario para que funcione el positioning */
+    text-align: center; /* Centra el contenido del contenedor */
+    margin-bottom: 20px; /* Espacio inferior para separar del formulario */
 }
 
-.main-title {
-    flex: 1; /* Hace que el título ocupe el máximo espacio posible */
-    text-align: center; /* Centra el texto del título */
-    margin: 0; /* Elimina el margen por defecto del título */
+.header-container h1 {
+    color: #007bff;
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.search-input {
-    width: 300px;
-    padding: 10px;
+.header-container p {
+    color: #555;
     font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 20px;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    position: absolute; /* Hace que la barra de búsqueda se posicione relativa al contenedor */
-    right: 20px; /* Alinea la barra de búsqueda a la derecha del contenedor */
+    margin: 0 auto;
+    max-width: 600px; /* Ajusta el ancho máximo para mejor lectura */
 }
 
-.search-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+/* Contenedor del formulario */
+.form-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    margin: 20px auto; /* Centrado horizontal */
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.sub-title {
+.form-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h1 {
+    text-align: center; /* Centra el título */
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-container p {
     text-align: center;
-    margin: 0 0 20px;
     color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
 }
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-container label {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Input y Select */
+.form-container input,
+.form-container select {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    background-color: #fff;
+}
+
+/* Botón de envío */
+.form-container button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    align-self: center; /* Centra el botón */
+    width: 50%; /* Ajusta el ancho según prefieras */
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
 
 /* Barra de navegación */
 .navbar {
@@ -147,32 +209,3 @@ body {
         min-width: 100%;
     }
 }
-
-/* Estilo de la galería de empleados */
-.empleado-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.empleado-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.3s;
-}
-
-.empleado-card:hover {
-    transform: scale(1.05);
-}
-
-.empleado-img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-

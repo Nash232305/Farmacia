@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales</title>
+    <link rel="stylesheet" th:href="@{/css/styleReportePFsucursal.css}">
+
+
+ 
+    
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="header-container">
+        <h1 class="main-title">Reporte de Productos, Fabricantes y Proveedores</h1>
+    </div>
+
+    <div class="id-section">
+        <div class="table-container">
+            <div class="id-section">
+                <div class="table-container">
+                    <table id="reporteTablaProveedores">
+                        <thead>
+                            <tr>
+                                <th>IDProveedor</th>
+                                <th>Proveedor</th>
+                                <th>Teléfono</th>
+                                <th>IDProducto</th>
+                                <th>Nombre</th>
+                                <th>Descripcion </th>
+                                <th>Fabricante</th>
+                                <th>Coste</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="reporte : ${reporteProductoPF}">
+                                <td th:text="${reporte.IDProveedor}"></td>
+                                <td th:text="${reporte.NombreProveedor}"></td>
+                                <td th:text="${reporte.TelefonoProveedor}"></td>
+                                <td th:text="${reporte.IDProducto}"></td>
+                                <td th:text="${reporte.NombreProducto}"></td>
+                                <td th:text="${reporte.DescripcionProducto}"></td>
+                                <td th:text="${reporte.NombreFabricante}"></td>
+                                <td th:text="${reporte.CostoProducto}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

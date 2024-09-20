@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Inventario</title>
+    <link rel="stylesheet" th:href="@{/css/styleReporteInventario.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Librería para gráficos -->
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/menu">Inicio</a></li>
+            <li class="submenu">
+                <a href="/Productos">Productos</a>
+                <ul>
+                    <li><a href="/AgregarProducto">Agregar Producto</a></li>
+                    <li><a href="/ModificarProducto">Modificar Producto</a></li>
+                    <li><a href="/EliminarProducto">Eliminar Producto</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Sucursales">Sucursales</a>
+                <ul>
+                    <li><a href="/AgregarSucursal">Agregar Sucursal</a></li>
+                    <li><a href="/ModificarSucursal">Modificar Sucursal</a></li>
+                    <li><a href="/EliminarSucursal">Eliminar Sucursal</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/Empleados">Empleados</a>
+                <ul>
+                    <li><a href="/AgregarEmpleado">Agregar Empleado</a></li>
+                    <li><a href="/ModificarEmpleado">Modificar Empleado</a></li>
+                    <li><a href="/EliminarEmpleado">Eliminar Empleado</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="/ReportesProductos">Reportes productos</a>
+                <ul>
+                    <li><a href="/ReporteProductoPF">Reporte de productos por PF</a></li>
+                    <li><a href="/ReporteInventario">Reporte de Inventario</a></li>
+                </ul>
+            </li>
+            <li><a href="/Login">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <div class="main-container">
+        <!-- Gráficos Circulares -->
+        <h2>Distribución de Productos por Sucursal</h2>
+        <div class="charts-container">
+            <!-- Gráficos se generan aquí con JavaScript -->
+        </div>
+
+        <!-- Sección de productos por sucursal -->
+        <h2>Productos Generales por Sucursal</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sucursal</th>
+                        <th>Provincia</th>
+                        <th>Teléfono</th>
+                        <th>Producto</th>
+                        <th>Descripción</th>
+                        <th>Fabricante</th>
+                        <th>Costo</th>
+                        <th>Cantidad Disponible</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="producto : ${productosDeSucursal}">
+                        <td th:text="${producto['NombreSucursal']}"></td>
+                        <td th:text="${producto['ProvinciaSucursal']}"></td>
+                        <td th:text="${producto['TelefonoSucursal']}"></td>
+                        <td th:text="${producto['ProductoNombre']}"></td>
+                        <td th:text="${producto['ProductoDescripcion']}"></td>
+                        <td th:text="${producto['FabricanteNombre']}"></td>
+                        <td th:text="${producto['ProductoCosto']}"></td>
+                        <td th:text="${producto['CantidadDisponible']}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Script para generar los gráficos -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener datos para los gráficos desde Thymeleaf
+            const productosXSucursal = /*[[${productosXSucursal}]]*/ [];
+            console.log('Datos recibidos para el gráfico:', productosXSucursal); // Debugging
+
+            // Validación de que hay datos para mostrar
+            if (!productosXSucursal || productosXSucursal.length === 0) {
+                console.error('No se encontraron datos para graficar.');
+                return;
+            }
+
+            // Recorre cada sucursal y crea un gráfico para cada una
+            productosXSucursal.forEach((sucursal, index) => {
+                const { NombreSucursal, productos } = sucursal;
+
+                // Extraer nombres de productos y cantidades
+                const labels = productos.map(producto => `${producto.ProductoNombre} (${producto.CantidadDisponible})`);
+                const data = productos.map(producto => producto.CantidadDisponible);
+
+                // Crear contenedor para cada gráfico
+                const container = document.createElement('div');
+                container.classList.add('chart-container');
+                container.innerHTML = `<h3>${NombreSucursal}</h3><canvas id="chart${index}" width="400" height="400"></canvas>`;
+                document.querySelector('.charts-container').appendChild(container);
+
+                // Configuración y creación del gráfico circular para cada sucursal
+                const ctx = document.getElementById(`chart${index}`).getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+                                '#FF9F40', '#FFCD56', '#C9CBFF', '#36A2EB', '#FF9F40'
+                            ],
+                            hoverOffset: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            title: {
+                                display: true,
+                                text: `Productos en ${NombreSucursal}`
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
