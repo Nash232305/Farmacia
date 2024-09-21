@@ -296,7 +296,8 @@ CREATE OR REPLACE PACKAGE BODY PCK_CRUD_PRODUCTOS AS
             COSTO, 
             IDFABRICANTE, 
             IDPROVEEDOR, 
-            CANTIDAD
+            CANTIDAD,
+            IDSUCURSAL
         FROM PRODUCTO_FARMACIA
         WHERE LOWER(NOMBRE) = LOWER(p_nombre);
     END sp_obtener_producto_por_nombre;
