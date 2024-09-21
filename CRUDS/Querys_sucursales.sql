@@ -10,7 +10,7 @@ CREATE OR REPLACE PROCEDURE crear_sucursal(
 ) AS
     v_id NUMBER;
 BEGIN
-    -- Encontrar el máximo ID actual e incrementar en 1
+    -- Encontrar el mÃ¡ximo ID actual e incrementar en 1
     SELECT NVL(MAX(ID), 0) + 1 INTO v_id FROM SUCURSAL_FARMACIA;
 
     -- Insertar la nueva sucursal con el ID generado
@@ -66,15 +66,11 @@ END eliminar_sucursal_logico;
 
 
 -- SP Obtener todas las SUCURSALES.
-CREATE OR REPLACE PROCEDURE obtener_sucursales_farmacia (
-    p_resultado OUT SYS_REFCURSOR
-) AS
-BEGIN
-    OPEN p_resultado FOR
-    SELECT ID, NOMBRE, PROVINCIA, ESTADO, TELEFONO, FECHAAPERTURA 
-    FROM SUCURSAL_FARMACIA;
+create or replace PROCEDURE obtener_sucursales_farmacia (    p_resultado OUT SYS_REFCURSOR
+) ASBEGIN
+    OPEN p_resultado FOR    SELECT ID, NOMBRE, PROVINCIA, ESTADO, TELEFONO, FECHAAPERTURA 
+    FROM SUCURSAL_FARMACIA    WHERE ESTADO = 'A' OR ESTADO = '1';
 END obtener_sucursales_farmacia;
-/
 
 -- SP para buscar sucursales 
 CREATE OR REPLACE PROCEDURE buscar_sucursales_farmacia (
@@ -129,7 +125,7 @@ BEGIN
     OPEN p_cursor FOR
     SELECT ID, NOMBRE
     FROM SUCURSAL_FARMACIA
-    WHERE ESTADO = 'A';  -- Asegúrate de que el estado sea 'A' para sucursales activas.
+    WHERE ESTADO = 'A';  -- AsegÃºrate de que el estado sea 'A' para sucursales activas.
 END sp_obtener_sucursales_activas;
 /
 
