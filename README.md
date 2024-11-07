@@ -39,7 +39,7 @@ La aplicación fue desarrollada utilizando:
 ### Pasos para instalar
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tu_usuario/Proyecto-BD2.git
+   git clone https://github.com/Nash232305/Farmacia.git
    ```
 2. Configura Apache Tomcat para desplegar la aplicación:
    - Copia el archivo `.war` generado en el directorio de despliegue de Tomcat.
